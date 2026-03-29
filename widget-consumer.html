@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>わが家の光熱費チェック</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;font-size:14px;line-height:1.6;color:#333;background:#fff;padding:16px;max-width:400px;margin:0 auto}
+.header{text-align:center;margin-bottom:18px}
+.header h1{font-size:18px;font-weight:800;color:#e67e22}
+.header p{font-size:12px;color:#888;margin-top:2px}
+
+.section{margin-bottom:16px}
+.section-label{font-size:13px;font-weight:700;color:#555;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.section-label .icon{font-size:16px}
+
+select{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:10px;font-size:14px;font-family:inherit;background:#fafafa;color:#333;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+select:focus{outline:none;border-color:#e67e22;box-shadow:0 0 0 3px rgba(230,126,34,0.15)}
+
+.grade-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grade-btn{display:flex;flex-direction:column;align-items:center;padding:14px 8px 12px;border:2px solid #e0e0e0;background:#fafafa;border-radius:14px;cursor:pointer;transition:all 0.2s;text-align:center}
+.grade-btn:hover{border-color:#f0c27a;background:#fff8ef}
+.grade-btn.on{border-color:#e67e22;background:#fff3e0;box-shadow:0 2px 8px rgba(230,126,34,0.15)}
+.grade-btn .g-icon{font-size:22px;margin-bottom:4px}
+.grade-btn .g-name{font-size:14px;font-weight:800;color:#333}
+.grade-btn .g-desc{font-size:10px;color:#888;margin-top:2px;line-height:1.3}
+.grade-btn.on .g-name{color:#e67e22}
+
+.toggle-wrap{display:flex;background:#f0f0f0;border-radius:10px;overflow:hidden;border:1px solid #e0e0e0}
+.toggle-btn{flex:1;padding:10px 0;text-align:center;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;color:#888;background:transparent;border:none;font-family:inherit}
+.toggle-btn.on{background:#e67e22;color:#fff}
+
+.results{margin-top:20px;padding-top:16px;border-top:2px solid #f0f0f0}
+.results-title{text-align:center;font-size:15px;font-weight:800;color:#555;margin-bottom:14px}
+
+.res-main{text-align:center;margin-bottom:16px;padding:20px 16px;background:linear-gradient(135deg,#fff8ef 0%,#fff3e0 100%);border-radius:16px;border:1px solid #f5deb3}
+.res-main .label{font-size:12px;color:#888;font-weight:600}
+.res-main .value{font-size:36px;font-weight:900;color:#e67e22;margin:4px 0;letter-spacing:-1px}
+.res-main .sub{font-size:11px;color:#aaa}
+
+.res-row{display:flex;gap:8px;margin-bottom:8px}
+.res-card{flex:1;padding:14px 10px;border-radius:12px;text-align:center}
+.res-card .label{font-size:11px;font-weight:600;color:#888}
+.res-card .value{font-size:20px;font-weight:800;margin:2px 0;letter-spacing:-0.5px}
+.res-card .sub{font-size:10px}
+
+.res-saving{background:#f0fdf4;border:1px solid #bbf7d0}
+.res-saving .value{color:#16a34a}
+.res-saving .sub{color:#6bb380}
+
+.res-subsidy{background:#eef6ff;border:1px solid #bdd9f5}
+.res-subsidy .value{color:#2563eb}
+.res-subsidy .sub{color:#6b9fd4}
+
+.warmth-bar{text-align:center;padding:12px;background:#fafafa;border-radius:12px;border:1px solid #eee;margin-bottom:8px}
+.warmth-bar .label{font-size:11px;font-weight:600;color:#888;margin-bottom:4px}
+.warmth-bar .emoji{font-size:28px;margin-bottom:2px}
+.warmth-bar .text{font-size:14px;font-weight:700}
+
+.insulation-bar{margin-bottom:12px;padding:12px;background:#fafafa;border-radius:12px;border:1px solid #eee}
+.insulation-bar .label{font-size:11px;font-weight:600;color:#888;margin-bottom:6px}
+.insulation-bar .bar-track{height:10px;background:#e0e0e0;border-radius:5px;overflow:hidden}
+.insulation-bar .bar-fill{height:100%;border-radius:5px;transition:width 0.4s ease,background 0.4s ease}
+.insulation-bar .bar-text{display:flex;justify-content:space-between;margin-top:4px;font-size:10px;color:#aaa}
+
+.stars{text-align:center;margin:12px 0;padding:10px;background:#fff8ef;border-radius:12px;border:1px solid #f5deb3}
+.stars .label{font-size:11px;font-weight:600;color:#888;margin-bottom:2px}
+.stars .star-display{font-size:24px;letter-spacing:2px}
+
+.cta-green{display:block;background:linear-gradient(135deg,#16a34a 0%,#22c55e 100%);color:#fff;padding:16px 20px;border-radius:14px;text-align:center;font-size:16px;font-weight:800;text-decoration:none;margin:16px 0 8px;transition:all 0.2s;border:none;cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(22,163,74,0.25)}
+.cta-green:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(22,163,74,0.3)}
+.cta-green .cta-sub{font-size:11px;color:rgba(255,255,255,0.85);margin-top:3px;font-weight:400}
+
+.link-detail{display:block;text-align:center;color:#e67e22;font-size:13px;font-weight:700;text-decoration:none;padding:10px;margin:4px 0;transition:color 0.2s}
+.link-detail:hover{color:#d35400}
+
+.powered{text-align:center;font-size:10px;color:#bbb;margin-top:12px;padding-top:10px;border-top:1px solid #f0f0f0}
+.powered a{color:#e67e22;text-decoration:none;font-weight:600}
+
+.icon-svg { display: inline-block; width: 1.2em; height: 1.2em; vertical-align: -0.15em; }
+.icon-svg.large { width: 48px; height: 48px; }
+.icon-svg.medium { width: 32px; height: 32px; }
+</style>
+</head>
+<body>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="ic-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+  <symbol id="ic-wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+  <symbol id="ic-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol>
+  <symbol id="ic-thermometer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/></symbol>
+  <symbol id="ic-banknote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></symbol>
+  <symbol id="ic-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></symbol>
+  <symbol id="ic-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+  <symbol id="ic-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="ic-window" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M12 3v18"/></symbol>
+  <symbol id="ic-brick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="6" x="3" y="3" rx="1"/><rect width="18" height="6" x="3" y="9" rx="1"/><rect width="18" height="6" x="3" y="15" rx="1"/><path d="M12 9v6"/><path d="M8 3v6"/><path d="M16 15v6"/></symbol>
+  <symbol id="ic-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+  <symbol id="ic-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></symbol>
+  <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></symbol>
+  <symbol id="ic-calculator" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></symbol>
+  <symbol id="ic-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></symbol>
+  <symbol id="ic-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="ic-mappin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="ic-hammer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0 0 0 0 0 0 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47l2.26 1.91"/></symbol>
+  <symbol id="ic-building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></symbol>
+  <symbol id="ic-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+  <symbol id="ic-warmface" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></symbol>
+  <symbol id="ic-neutralface" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" x2="16" y1="15" y2="15"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></symbol>
+  <symbol id="ic-coldface" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></symbol>
+</svg>
+
+<div class="header">
+  <h1>わが家の光熱費チェック</h1>
+  <p>3つ選ぶだけ! かんたん光熱費シミュレーション</p>
+</div>
+
+<div class="section">
+  <div class="section-label"><span class="icon"><svg class="icon-svg" style="color:#ef4444"><use href="#ic-mappin"/></svg></span> お住まいの地域</div>
+  <select id="regionSel" onchange="recalc()">
+    <option value="1">北海道（旭川エリア）</option>
+    <option value="2">北海道（札幌エリア）</option>
+    <option value="3">東北（盛岡エリア）</option>
+    <option value="4">東北（仙台エリア）</option>
+    <option value="5">関東（つくばエリア）</option>
+    <option value="6" selected>関東（東京エリア）</option>
+    <option value="7">九州（鹿児島エリア）</option>
+    <option value="8">沖縄（那覇エリア）</option>
+  </select>
+</div>
+
+<div class="section">
+  <div class="section-label"><span class="icon"><svg class="icon-svg" style="color:#3b82f6"><use href="#ic-house"/></svg></span> 断熱グレード</div>
+  <div class="grade-grid" id="gradeGrid">
+    <button class="grade-btn" data-grade="4" onclick="pickGrade(this)">
+      <div class="g-icon"><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#d4d4d8"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#d4d4d8"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#d4d4d8"><use href="#ic-star"/></svg></div>
+      <div class="g-name">最低限</div>
+      <div class="g-desc">法律で決まった<br>最低ラインの断熱</div>
+    </button>
+    <button class="grade-btn" data-grade="5" onclick="pickGrade(this)">
+      <div class="g-icon"><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#d4d4d8"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#d4d4d8"><use href="#ic-star"/></svg></div>
+      <div class="g-name">標準</div>
+      <div class="g-desc">一般的な<br>新築レベルの断熱</div>
+    </button>
+    <button class="grade-btn on" data-grade="6" onclick="pickGrade(this)">
+      <div class="g-icon"><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#d4d4d8"><use href="#ic-star"/></svg></div>
+      <div class="g-name">高性能</div>
+      <div class="g-desc">光熱費が大きく<br>下がる高断熱</div>
+    </button>
+    <button class="grade-btn" data-grade="7" onclick="pickGrade(this)">
+      <div class="g-icon"><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg><svg class="icon-svg" style="color:#eab308"><use href="#ic-star"/></svg></div>
+      <div class="g-name">最高品質</div>
+      <div class="g-desc">世界基準の<br>超高断熱住宅</div>
+    </button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label"><span class="icon"><svg class="icon-svg" style="color:#d97706"><use href="#ic-hammer"/></svg></span> 建て方</div>
+  <div class="toggle-wrap">
+    <button class="toggle-btn on" id="modeNew" onclick="setMode('new')">新築</button>
+    <button class="toggle-btn" id="modeReform" onclick="setMode('reform')">リフォーム</button>
+  </div>
+</div>
+
+<div class="results">
+  <div class="results-title">シミュレーション結果</div>
+
+  <div class="res-main">
+    <div class="label">月々の電気・ガス代</div>
+    <div class="value" id="monthlyCost">--</div>
+    <div class="sub" id="annualCostSub">年間 --</div>
+  </div>
+
+  <div class="res-row">
+    <div class="res-card res-saving">
+      <div class="label">年間おトク額</div>
+      <div class="value" id="savingVal">--</div>
+      <div class="sub" id="savingSub">一般的な家と比べて</div>
+    </div>
+    <div class="res-card res-subsidy">
+      <div class="label">もらえる補助金</div>
+      <div class="value" id="subsidyVal">--</div>
+      <div class="sub" id="subsidySub">最大の目安額</div>
+    </div>
+  </div>
+
+  <div class="insulation-bar">
+    <div class="label">断熱スコア（低いほど高性能）</div>
+    <div class="bar-track"><div class="bar-fill" id="uaBar" style="width:50%;background:#e67e22"></div></div>
+    <div class="bar-text"><span>最高品質</span><span id="uaLabel">--</span><span>最低限</span></div>
+  </div>
+
+  <div class="warmth-bar">
+    <div class="label">冬の暖かさ</div>
+    <div class="emoji" id="warmthEmoji">--</div>
+    <div class="text" id="warmthText">--</div>
+  </div>
+
+  <div class="stars">
+    <div class="label">総合おすすめ度</div>
+    <div class="star-display" id="starDisplay">--</div>
+  </div>
+</div>
+
+<a class="cta-green" href="https://townlife-aff.com" target="_blank" rel="noopener" id="ctaAff">
+  無料で見積もりを取る &rarr;
+  <div class="cta-sub">複数社の見積もりをまとめて無料で比較できます</div>
+</a>
+
+<a class="link-detail" href="../index.html" target="_top" id="ctaDetail">
+  もっと詳しく &rarr;
+</a>
+
+<a href="../consumer.html" style="display:block;text-align:center;font-size:12px;color:#999;margin-top:8px;text-decoration:none">もっと詳しい診断はこちら</a>
+
+<div class="powered">
+  <a href="../index.html" target="_top">EneCheck</a> で計算 | 2025年基準
+</div>
+
+<script>
+// ================================================================
+// DATA
+// ================================================================
+var UA_STD={1:0.46,2:0.46,3:0.56,4:0.75,5:0.87,6:0.87,7:0.87,8:null};
+var ZEH_STD={1:0.40,2:0.40,3:0.50,4:0.60,5:0.60,6:0.60,7:0.60};
+var GRADE_UA={
+  4:{1:0.46,2:0.46,3:0.56,4:0.75,5:0.87,6:0.87,7:0.87,8:null},
+  5:{1:0.40,2:0.40,3:0.50,4:0.60,5:0.60,6:0.60,7:0.60,8:null},
+  6:{1:0.28,2:0.28,3:0.28,4:0.34,5:0.46,6:0.46,7:0.46,8:null},
+  7:{1:0.20,2:0.20,3:0.20,4:0.23,5:0.26,6:0.26,7:0.26,8:null}
+};
+var PE_STD_ABS={
+  heat:{1:67200,2:57600,3:42500,4:36900,5:22100,6:16800,7:10200,8:2100},
+  cool:{1:2400,2:3200,3:4800,4:5900,5:8500,6:10500,7:14200,8:22500},
+  vent:{1:5800,2:5500,3:5200,4:5000,5:4800,6:4700,7:4600,8:4500},
+  hw:  {1:28500,2:27600,3:26800,4:26200,5:25200,6:24600,7:23400,8:22000},
+  light:{1:8900,2:8900,3:8900,4:8900,5:8900,6:8900,7:8900,8:8900},
+  other:{1:21241,2:21241,3:21241,4:21241,5:21241,6:21241,7:21241,8:21241}
+};
+var PRESET={area:120,envArea:310,wallA:120,ceilA:60,floorA:60,winA:21,doorA:3.5};
+
+// Grade -> spec mapping (wallR, ceilR, floorR, winU)
+var GRADE_SPECS={
+  4:{wallR:2.22, ceilR:2.22, floorR:1.79, winU:4.65},
+  5:{wallR:2.63, ceilR:4.44, floorR:3.57, winU:2.33},
+  6:{wallR:3.00, ceilR:4.44, floorR:3.57, winU:1.90},
+  7:{wallR:4.55, ceilR:6.67, floorR:4.55, winU:1.30}
+};
+
+var ELEC_PEF=9.76;
+var GAS_PEF=45;
+function ELEC_RATE(kwh){var c=14400;if(kwh<=120*12)return c+kwh*20;c+=120*12*20;kwh-=120*12;if(kwh<=180*12)return c+kwh*26;c+=180*12*26;kwh-=180*12;return c+kwh*30}
+function GAS_RATE(m3){return 9600+m3*145}
+
+var currentGrade=6;
+var currentMode='new';
+
+// ================================================================
+// CORE CALC
+// ================================================================
+function getUW(R){return 1/(0.15+parseFloat(R))}
+function getUC(R){return 1/(0.13+parseFloat(R))}
+function getUF(R){return 1/(0.19+parseFloat(R))}
+function $(id){return document.getElementById(id)}
+
+function calcUA(region,wallR,ceilR,floorR,winU){
+  var p=PRESET;
+  var wallU=getUW(wallR),ceilU=getUC(ceilR),floorU=getUF(floorR);
+  var doorU=3.49;
+  var dirs=[0.15,0.20,0.45,0.20];
+  var tl=0;
+  for(var i=0;i<dirs.length;i++){
+    var wA=p.winA*dirs[i];
+    var wlA=p.wallA/4-wA;
+    tl+=Math.max(wlA,0)*wallU+wA*winU;
+  }
+  tl+=p.ceilA*ceilU;
+  tl+=p.floorA*floorU*0.7;
+  tl+=p.doorA*doorU;
+  return p.envArea>0?tl/p.envArea:0;
+}
+
+function calcEnergyCost(region,ua){
+  var uaStd=UA_STD[region]||0.87;
+  if(!uaStd)uaStd=0.87;
+  var ratio=Math.max(ua/uaStd,0.3);
+  var totalMJ=0;
+  var cats=['heat','cool','vent','hw','light','other'];
+  for(var i=0;i<cats.length;i++){
+    var base=PE_STD_ABS[cats[i]][region];
+    if(cats[i]==='heat')totalMJ+=base*ratio;
+    else totalMJ+=base;
+  }
+  var hwMJ=PE_STD_ABS.hw[region];
+  var elecMJ=totalMJ-hwMJ;
+  var elecKwh=elecMJ/ELEC_PEF;
+  var gasM3=hwMJ/GAS_PEF;
+  var annual=ELEC_RATE(elecKwh)+GAS_RATE(gasM3);
+  return Math.round(annual);
+}
+
+function matchSubsidies(ua,grade,region){
+  var zehStd=ZEH_STD[region];
+  var zehUA=zehStd?ua<=zehStd:false;
+  var uaStd=UA_STD[region]||0.87;
+  var bei=uaStd?Math.max(0.5,0.7+0.3*(ua/uaStd)):0.8;
+  var subs=[];
+  if(grade>=6&&bei<=0.8)subs.push({name:'子育てエコホーム支援(ZEH水準)',amt:100});
+  else if(grade>=5&&bei<=0.9)subs.push({name:'子育てエコホーム支援(長期優良)',amt:100});
+  if(zehUA&&bei<=0.8)subs.push({name:'ZEH補助金',amt:55});
+  if(grade>=6)subs.push({name:'地域型グリーン化(高度省エネ)',amt:140});
+  else if(grade>=5)subs.push({name:'地域型グリーン化(長寿命型)',amt:110});
+  var loanLimit=0;
+  if(zehUA&&bei<=0.8){loanLimit=4500}
+  else if(grade>=4){loanLimit=4000}
+  if(loanLimit>0){
+    var taxBenefit=Math.round(loanLimit*0.007*13);
+    subs.push({name:'住宅ローン減税',amt:taxBenefit});
+  }
+  if(zehUA)subs.push({name:'フラット35S Aプラン',amt:Math.round(3500*0.005*10)});
+  else if(grade>=4)subs.push({name:'フラット35S Bプラン',amt:Math.round(3500*0.0025*5)});
+  return subs;
+}
+
+// ================================================================
+// UI HANDLERS
+// ================================================================
+function pickGrade(el){
+  var bs=document.querySelectorAll('.grade-btn');
+  for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');
+  el.classList.add('on');
+  currentGrade=parseInt(el.dataset.grade,10);
+  recalc();
+}
+
+function setMode(mode){
+  currentMode=mode;
+  $('modeNew').classList.toggle('on',mode==='new');
+  $('modeReform').classList.toggle('on',mode==='reform');
+  recalc();
+}
+
+// ================================================================
+// MAIN RECALC
+// ================================================================
+function recalc(){
+  var region=parseInt($('regionSel').value,10);
+  var specs=GRADE_SPECS[currentGrade];
+  if(!specs)return;
+
+  var ua=calcUA(region,specs.wallR,specs.ceilR,specs.floorR,specs.winU);
+  var grade=currentGrade;
+
+  // Annual cost
+  var annualCost=calcEnergyCost(region,ua);
+  // Reform mode: slightly higher costs (partial insulation effectiveness ~85%)
+  if(currentMode==='reform'){
+    annualCost=Math.round(annualCost*1.12);
+  }
+  var monthly=Math.round(annualCost/12);
+
+  $('monthlyCost').textContent='\u00a5'+monthly.toLocaleString();
+  $('annualCostSub').textContent='\u5e74\u9593 \u00a5'+annualCost.toLocaleString();
+
+  // Saving vs baseline (grade 4)
+  var baseSpecs=GRADE_SPECS[4];
+  var baseUA=calcUA(region,baseSpecs.wallR,baseSpecs.ceilR,baseSpecs.floorR,baseSpecs.winU);
+  var baseCost=calcEnergyCost(region,baseUA);
+  var saving=baseCost-annualCost;
+  if(saving<0)saving=0;
+  $('savingVal').textContent='\u00a5'+saving.toLocaleString();
+  $('savingSub').textContent=saving>0?'\u4e00\u822c\u7684\u306a\u5bb6\u3088\u308a\u304a\u30c8\u30af':'\u57fa\u6e96\u3068\u540c\u7b49';
+
+  // Subsidies
+  var subs=matchSubsidies(ua,grade,region);
+  var totalSub=0;
+  for(var i=0;i<subs.length;i++)totalSub+=subs[i].amt;
+  if(totalSub>0){
+    $('subsidyVal').textContent='\u6700\u5927 '+totalSub+'\u4e07\u5186';
+    $('subsidySub').textContent=subs.length+'\u4ef6\u306e\u5236\u5ea6\u304c\u5bfe\u8c61';
+  }else{
+    $('subsidyVal').textContent='\u2015';
+    $('subsidySub').textContent='\u5bfe\u8c61\u5236\u5ea6\u306a\u3057';
+  }
+
+  // Insulation score bar (UA value: lower = better)
+  // Range: 0.20 (best) to 1.0 (worst). Map to percentage (inverted)
+  var uaClamped=Math.max(0.15,Math.min(ua,1.0));
+  var barPct=((uaClamped-0.15)/(1.0-0.15))*100;
+  $('uaBar').style.width=barPct+'%';
+  // Color: green when low, orange when mid, red when high
+  if(barPct<30){
+    $('uaBar').style.background='#16a34a';
+  }else if(barPct<60){
+    $('uaBar').style.background='#e67e22';
+  }else{
+    $('uaBar').style.background='#dc2626';
+  }
+  // Show descriptive label instead of raw number
+  var scoreLabel;
+  if(grade>=7)scoreLabel='\u6700\u9ad8\u30e9\u30f3\u30af';
+  else if(grade>=6)scoreLabel='\u512a\u79c0';
+  else if(grade>=5)scoreLabel='\u826f\u597d';
+  else scoreLabel='\u6700\u4f4e\u9650';
+  $('uaLabel').textContent=scoreLabel;
+
+  // Warmth (based on estimated hallway temperature)
+  var outdoorTemp={1:-8,2:-4,3:-2,4:1,5:3,6:5,7:7,8:15};
+  var tOut=outdoorTemp[region]||3;
+  var factor=Math.min(0.95,Math.max(0.3,1-ua*0.6));
+  var hallway=Math.round(tOut+(20-tOut)*factor);
+
+  if(hallway>15){
+    $('warmthEmoji').innerHTML='<svg class="icon-svg" style="color:#16a34a;width:28px;height:28px"><use href="#ic-warmface"/></svg>';
+    $('warmthText').textContent='\u6696\u304b\u3044\u5bb6\uff08\u5eca\u4e0b '+hallway+'\u00b0C\uff09';
+    $('warmthText').style.color='#16a34a';
+  }else if(hallway>=10){
+    $('warmthEmoji').innerHTML='<svg class="icon-svg" style="color:#e67e22;width:28px;height:28px"><use href="#ic-neutralface"/></svg>';
+    $('warmthText').textContent='\u666e\u901a\uff08\u5eca\u4e0b '+hallway+'\u00b0C\uff09';
+    $('warmthText').style.color='#e67e22';
+  }else{
+    $('warmthEmoji').innerHTML='<svg class="icon-svg" style="color:#dc2626;width:28px;height:28px"><use href="#ic-coldface"/></svg>';
+    $('warmthText').textContent='\u5bd2\u3044\u5bb6\uff08\u5eca\u4e0b '+hallway+'\u00b0C\uff09';
+    $('warmthText').style.color='#dc2626';
+  }
+
+  // Stars (overall recommendation)
+  var starCount;
+  if(grade>=7)starCount=6;
+  else if(grade>=6)starCount=5;
+  else if(grade>=5)starCount=4;
+  else starCount=3;
+  var starStr='';
+  for(var s=0;s<starCount;s++)starStr+='<svg class="icon-svg" style="color:#eab308;width:20px;height:20px"><use href="#ic-star"/></svg>';
+  for(var s=starCount;s<6;s++)starStr+='<svg class="icon-svg" style="color:#d4d4d8;width:20px;height:20px"><use href="#ic-star"/></svg>';
+  $('starDisplay').innerHTML=starStr;
+
+  // Update detail link
+  $('ctaDetail').href='../index.html?region='+region;
+}
+
+// ================================================================
+// URL PARAMS
+// ================================================================
+function applyParams(){
+  var params=new URLSearchParams(window.location.search);
+  if(params.has('region')){
+    var r=parseInt(params.get('region'),10);
+    if(r>=1&&r<=8)$('regionSel').value=r;
+  }
+  if(params.has('grade')){
+    var g=parseInt(params.get('grade'),10);
+    if(g>=4&&g<=7){
+      currentGrade=g;
+      var bs=document.querySelectorAll('.grade-btn');
+      for(var i=0;i<bs.length;i++){
+        bs[i].classList.remove('on');
+        if(parseInt(bs[i].dataset.grade,10)===g)bs[i].classList.add('on');
+      }
+    }
+  }
+  if(params.has('mode')){
+    var m=params.get('mode');
+    if(m==='reform')setMode('reform');
+    else setMode('new');
+  }
+}
+
+// ================================================================
+// INIT
+// ================================================================
+applyParams();
+recalc();
+</script>
+</body>
+</html>

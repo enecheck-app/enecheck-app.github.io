@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9000 11000" width="900" height="1100">
+  <!-- Roof Plan (屋根伏図) - Units: mm, 切妻屋根 -->
+  <text x="4500" y="300" text-anchor="middle" font-size="250" font-weight="bold">屋根伏図</text>
+  <!-- Roof outline with overhang 500mm each side -->
+  <polygon points="500,1000 4500,500 8500,1000 8500,10500 500,10500" fill="none" stroke="black" stroke-width="25"/>
+  <!-- Ridge line -->
+  <line x1="4500" y1="500" x2="4500" y2="10500" stroke="black" stroke-width="15" stroke-dasharray="100,50"/>
+  <!-- Eave lines -->
+  <line x1="500" y1="1000" x2="500" y2="10500" stroke="black" stroke-width="20"/>
+  <line x1="8500" y1="1000" x2="8500" y2="10500" stroke="black" stroke-width="20"/>
+  <!-- Roof area: approximately 4.5m x 10m x 2 sides = 90m², but with slope factor ~1.1 -->
+  <!-- Simplified as rectangle for area calculation: 9m x 11m = 99m² footprint, actual roof ~90m² -->
+  <rect x="500" y="500" width="8000" height="10000" fill="none" stroke="gray" stroke-width="5" stroke-dasharray="50,50"/>
+  <text x="4500" y="5500" text-anchor="middle" font-size="200" fill="gray">屋根投影面積 80.0㎡</text>
+  <text x="4500" y="6000" text-anchor="middle" font-size="180" fill="gray">勾配係数 1.12 → 屋根面積 89.6㎡</text>
+</svg>

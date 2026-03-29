@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EneCheck - あなたの家の省エネ性能を1分で無料診断</title>
+<meta name="description" content="断熱の選び方ひとつで年間5万円以上の差。光熱費・補助金・快適さを1分で無料シミュレーション。登録不要・個人情報不要。">
+<meta name="theme-color" content="#fffbf5">
+<link rel="canonical" href="https://enecheck.com/lp-consumer.html">
+
+<!-- OGP -->
+<meta property="og:title" content="あなたの家、光熱費で損していませんか？ | EneCheck">
+<meta property="og:description" content="断熱の選び方ひとつで年間5万円以上の差。1分で無料診断。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+/* ========== RESET & BASE ========== */
+*{box-sizing:border-box;margin:0;padding:0}
+html{
+  font-family:system-ui,-apple-system,'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;
+  font-size:18px;
+  line-height:1.8;
+  color:#333;
+  scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%;
+}
+body{
+  background:linear-gradient(180deg,#fffbf5 0%,#fff8f0 30%,#ffffff 70%);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ========== UTILITIES ========== */
+.wrap{
+  width:100%;
+  max-width:640px;
+  margin:0 auto;
+  padding:0 20px;
+}
+section{
+  padding:56px 0;
+}
+.section-title{
+  font-size:26px;
+  font-weight:800;
+  line-height:1.5;
+  text-align:center;
+  margin-bottom:12px;
+  color:#1a1a1a;
+}
+.section-sub{
+  font-size:15px;
+  color:#666;
+  text-align:center;
+  margin-bottom:36px;
+  line-height:1.7;
+}
+.icon-inline{
+  width:24px;
+  height:24px;
+  vertical-align:middle;
+  display:inline-block;
+}
+.icon-md{
+  width:32px;
+  height:32px;
+}
+.icon-lg{
+  width:48px;
+  height:48px;
+}
+
+/* ========== CTA BUTTON ========== */
+.cta-btn{
+  display:block;
+  width:100%;
+  max-width:400px;
+  margin:0 auto;
+  padding:18px 32px;
+  background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);
+  color:#fff;
+  font-size:20px;
+  font-weight:800;
+  text-align:center;
+  text-decoration:none;
+  border-radius:16px;
+  border:none;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(249,115,22,0.4);
+  transition:transform 0.2s,box-shadow 0.2s;
+  position:relative;
+}
+.cta-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(249,115,22,0.5);
+}
+.cta-btn:active{
+  transform:translateY(0);
+}
+.cta-btn .arrow{
+  display:inline-block;
+  margin-left:8px;
+  transition:transform 0.2s;
+}
+.cta-btn:hover .arrow{
+  transform:translateX(4px);
+}
+.cta-trust{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  margin-top:14px;
+  font-size:14px;
+  color:#666;
+}
+.cta-trust span{
+  display:flex;
+  align-items:center;
+  gap:4px;
+}
+.cta-trust svg{
+  width:16px;
+  height:16px;
+  color:#16a34a;
+}
+
+/* ========== HEADER ========== */
+.site-header{
+  text-align:center;
+  padding:16px 20px 0;
+}
+.logo{
+  font-size:22px;
+  font-weight:800;
+  color:#f97316;
+  text-decoration:none;
+  letter-spacing:0.5px;
+}
+
+/* ========== HERO ========== */
+.hero{
+  text-align:center;
+  padding:48px 0 56px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  top:-40px;
+  right:-60px;
+  width:240px;
+  height:240px;
+  background:radial-gradient(circle,rgba(249,115,22,0.08) 0%,transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.hero::after{
+  content:'';
+  position:absolute;
+  bottom:-20px;
+  left:-40px;
+  width:180px;
+  height:180px;
+  background:radial-gradient(circle,rgba(22,163,74,0.06) 0%,transparent 70%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.hero-house{
+  width:80px;
+  height:80px;
+  margin:0 auto 24px;
+  color:#f97316;
+  opacity:0.85;
+}
+.hero h1{
+  font-size:32px;
+  font-weight:800;
+  line-height:1.5;
+  color:#1a1a1a;
+  margin-bottom:16px;
+}
+.hero h1 .highlight{
+  color:#f97316;
+  position:relative;
+}
+.hero h1 .highlight::after{
+  content:'';
+  position:absolute;
+  bottom:2px;
+  left:0;
+  right:0;
+  height:8px;
+  background:rgba(249,115,22,0.15);
+  border-radius:4px;
+  z-index:-1;
+}
+.hero-text{
+  font-size:18px;
+  color:#555;
+  line-height:1.8;
+  margin-bottom:32px;
+}
+.hero-text strong{
+  color:#1a1a1a;
+  font-weight:700;
+}
+
+/* ========== PROBLEM ========== */
+.problem{
+  background:linear-gradient(180deg,#fff 0%,#fef9f3 100%);
+}
+.problem-box{
+  background:#fff;
+  border-radius:16px;
+  padding:28px 24px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+  border-left:4px solid #f97316;
+}
+.problem-box .badge{
+  display:inline-block;
+  background:#fef3c7;
+  color:#b45309;
+  font-size:13px;
+  font-weight:700;
+  padding:4px 12px;
+  border-radius:20px;
+  margin-bottom:12px;
+}
+.problem-box h3{
+  font-size:20px;
+  font-weight:800;
+  line-height:1.5;
+  margin-bottom:12px;
+  color:#1a1a1a;
+}
+.problem-box p{
+  font-size:16px;
+  line-height:1.8;
+  color:#555;
+}
+.problem-box .emphasis{
+  display:block;
+  margin-top:16px;
+  background:#fff7ed;
+  padding:16px;
+  border-radius:12px;
+  font-size:17px;
+  font-weight:700;
+  color:#c2410c;
+  line-height:1.6;
+  text-align:center;
+}
+
+/* ========== BEFORE/AFTER ========== */
+.compare{
+  background:linear-gradient(180deg,#fef9f3 0%,#fff 100%);
+}
+.compare-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.compare-card{
+  border-radius:16px;
+  padding:20px 16px;
+  text-align:center;
+}
+.compare-card.cold{
+  background:linear-gradient(180deg,#f1f5f9 0%,#e8ecf1 100%);
+  border:2px solid #cbd5e1;
+}
+.compare-card.warm{
+  background:linear-gradient(180deg,#f0fdf4 0%,#dcfce7 100%);
+  border:2px solid #86efac;
+  position:relative;
+}
+.compare-card .badge-rec{
+  position:absolute;
+  top:-12px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#16a34a;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+  padding:3px 14px;
+  border-radius:20px;
+  white-space:nowrap;
+}
+.compare-card .card-title{
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:16px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(0,0,0,0.08);
+}
+.cold .card-title{color:#64748b}
+.warm .card-title{color:#16a34a}
+.compare-row{
+  margin-bottom:14px;
+}
+.compare-row .label{
+  font-size:12px;
+  color:#888;
+  margin-bottom:2px;
+}
+.compare-row .value{
+  font-size:22px;
+  font-weight:800;
+  line-height:1.3;
+}
+.cold .value{color:#475569}
+.warm .value{color:#15803d}
+.compare-row .unit{
+  font-size:13px;
+  font-weight:400;
+}
+.compare-bottom{
+  margin-top:8px;
+  padding-top:14px;
+  border-top:1px solid rgba(0,0,0,0.08);
+}
+.compare-bottom .label{
+  font-size:12px;
+  color:#888;
+}
+.compare-bottom .value{
+  font-size:18px;
+  font-weight:800;
+}
+.cold .compare-bottom .value{color:#94a3b8}
+.warm .compare-bottom .value{color:#16a34a}
+.compare-note{
+  text-align:center;
+  margin-top:20px;
+  font-size:14px;
+  color:#888;
+  line-height:1.6;
+}
+
+/* ========== 3-STEP FLOW ========== */
+.steps{
+  background:#fff;
+}
+.step-flow{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:24px;
+}
+.step-item{
+  flex:1;
+  max-width:160px;
+  text-align:center;
+}
+.step-icon-wrap{
+  width:64px;
+  height:64px;
+  margin:0 auto 12px;
+  background:linear-gradient(135deg,#fff7ed 0%,#ffedd5 100%);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.step-icon-wrap svg{
+  width:28px;
+  height:28px;
+  color:#f97316;
+}
+.step-num{
+  position:absolute;
+  top:-4px;
+  right:-4px;
+  width:24px;
+  height:24px;
+  background:#f97316;
+  color:#fff;
+  font-size:13px;
+  font-weight:800;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.step-item h4{
+  font-size:15px;
+  font-weight:700;
+  color:#1a1a1a;
+  margin-bottom:4px;
+  line-height:1.4;
+}
+.step-item p{
+  font-size:13px;
+  color:#888;
+  line-height:1.5;
+}
+.step-arrow{
+  margin-top:28px;
+  color:#ccc;
+  flex-shrink:0;
+}
+.step-arrow svg{
+  width:20px;
+  height:20px;
+}
+.step-result{
+  text-align:center;
+  background:#fff7ed;
+  border-radius:12px;
+  padding:14px 20px;
+  font-size:16px;
+  font-weight:700;
+  color:#c2410c;
+}
+
+/* ========== FEATURES GRID ========== */
+.features{
+  background:linear-gradient(180deg,#fff 0%,#fef9f3 100%);
+}
+.features-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.feature-card{
+  background:#fff;
+  border-radius:14px;
+  padding:20px 16px;
+  box-shadow:0 1px 6px rgba(0,0,0,0.05);
+  border:1px solid #f0ebe4;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+.feature-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+.feature-icon{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:12px;
+}
+.feature-icon svg{
+  width:24px;
+  height:24px;
+}
+.feature-icon.orange{background:#fff7ed;color:#f97316}
+.feature-icon.blue{background:#eff6ff;color:#3b82f6}
+.feature-icon.green{background:#f0fdf4;color:#16a34a}
+.feature-icon.purple{background:#faf5ff;color:#9333ea}
+.feature-icon.teal{background:#f0fdfa;color:#0d9488}
+.feature-icon.amber{background:#fffbeb;color:#d97706}
+.feature-card h4{
+  font-size:16px;
+  font-weight:700;
+  color:#1a1a1a;
+  margin-bottom:6px;
+  line-height:1.4;
+}
+.feature-card p{
+  font-size:13px;
+  color:#777;
+  line-height:1.6;
+}
+
+/* ========== STATS / SOCIAL PROOF ========== */
+.proof{
+  background:linear-gradient(180deg,#1a1a2e 0%,#16213e 100%);
+  color:#fff;
+}
+.proof .section-title{color:#fff}
+.proof .section-sub{color:rgba(255,255,255,0.6)}
+.stats-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.stat-card{
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;
+  padding:20px 16px;
+  text-align:center;
+  backdrop-filter:blur(4px);
+}
+.stat-number{
+  font-size:32px;
+  font-weight:800;
+  color:#f97316;
+  line-height:1.2;
+  margin-bottom:4px;
+}
+.stat-number .stat-unit{
+  font-size:16px;
+  font-weight:600;
+}
+.stat-label{
+  font-size:13px;
+  color:rgba(255,255,255,0.7);
+  line-height:1.5;
+}
+
+/* ========== FAQ ========== */
+.faq{
+  background:#fff;
+}
+.faq-list{
+  list-style:none;
+}
+.faq-item{
+  border-bottom:1px solid #f0ebe4;
+}
+.faq-item:first-child{
+  border-top:1px solid #f0ebe4;
+}
+.faq-q{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  background:none;
+  border:none;
+  padding:18px 4px;
+  font-size:16px;
+  font-weight:700;
+  color:#1a1a1a;
+  cursor:pointer;
+  text-align:left;
+  line-height:1.5;
+  gap:12px;
+  font-family:inherit;
+}
+.faq-q svg{
+  width:20px;
+  height:20px;
+  flex-shrink:0;
+  color:#999;
+  transition:transform 0.3s;
+}
+.faq-item.open .faq-q svg{
+  transform:rotate(180deg);
+}
+.faq-a{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.3s ease,padding 0.3s ease;
+}
+.faq-item.open .faq-a{
+  max-height:300px;
+}
+.faq-a-inner{
+  padding:0 4px 18px;
+  font-size:15px;
+  color:#666;
+  line-height:1.8;
+}
+
+/* ========== FINAL CTA ========== */
+.final-cta{
+  background:linear-gradient(180deg,#fff7ed 0%,#ffedd5 100%);
+  text-align:center;
+}
+.final-cta h2{
+  font-size:26px;
+  font-weight:800;
+  line-height:1.5;
+  color:#1a1a1a;
+  margin-bottom:24px;
+}
+.final-cta .small{
+  margin-top:14px;
+  font-size:14px;
+  color:#888;
+}
+
+/* ========== FOOTER ========== */
+.site-footer{
+  text-align:center;
+  padding:32px 20px;
+  background:#faf8f5;
+  border-top:1px solid #f0ebe4;
+}
+.footer-brand{
+  font-size:18px;
+  font-weight:800;
+  color:#f97316;
+  margin-bottom:4px;
+}
+.footer-desc{
+  font-size:13px;
+  color:#999;
+  margin-bottom:12px;
+}
+.footer-link{
+  font-size:14px;
+  color:#f97316;
+  text-decoration:none;
+  font-weight:600;
+}
+.footer-link:hover{
+  text-decoration:underline;
+}
+.footer-copy{
+  margin-top:16px;
+  font-size:12px;
+  color:#bbb;
+}
+
+/* ========== ANIMATIONS ========== */
+.fade-in{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.6s ease,transform 0.6s ease;
+}
+.fade-in.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+.fade-in-delay-1{transition-delay:0.1s}
+.fade-in-delay-2{transition-delay:0.2s}
+.fade-in-delay-3{transition-delay:0.3s}
+
+/* ========== RESPONSIVE ========== */
+@media(max-width:480px){
+  html{font-size:16px}
+  .hero h1{font-size:26px}
+  .section-title{font-size:22px}
+  .compare-row .value{font-size:18px}
+  .stat-number{font-size:26px}
+  .step-flow{gap:4px}
+  .step-item h4{font-size:13px}
+  .step-item p{font-size:12px}
+  .feature-card{padding:16px 12px}
+  .feature-card h4{font-size:14px}
+}
+@media(min-width:641px){
+  .hero h1{font-size:36px}
+  .section-title{font-size:30px}
+  .features-grid{gap:16px}
+  .stats-grid{gap:16px}
+  .compare-grid{gap:20px}
+  .wrap{padding:0 32px}
+}
+</style>
+</head>
+<body>
+
+<!-- ========== SVG SPRITE ========== -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-house" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+    <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+  </symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/>
+    <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>
+  </symbol>
+  <symbol id="i-thermometer" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>
+  </symbol>
+  <symbol id="i-banknote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect width="20" height="12" x="2" y="6" rx="2"/>
+    <circle cx="12" cy="12" r="2"/>
+    <path d="M6 12h.01M18 12h.01"/>
+  </symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 3v16a2 2 0 0 0 2 2h16"/>
+    <path d="m19 9-5 5-4-4-3 3"/>
+  </symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10Z"/>
+    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+  </symbol>
+  <symbol id="i-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+  </symbol>
+  <symbol id="i-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+    <circle cx="12" cy="10" r="3"/>
+  </symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 6 9 17l-5-5"/>
+  </symbol>
+  <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m6 9 6 6 6-6"/>
+  </symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m9 18 6-6-6-6"/>
+  </symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+    <path d="m9 11 3 3L22 4"/>
+  </symbol>
+</svg>
+
+<!-- ========== HEADER ========== -->
+<header class="site-header">
+  <a href="lp-consumer.html" class="logo">EneCheck</a>
+</header>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-house fade-in">
+      <svg><use href="#i-house"/></svg>
+    </div>
+    <h1 class="fade-in">
+      あなたの家、<br>
+      <span class="highlight">光熱費で損</span>していませんか？
+    </h1>
+    <p class="hero-text fade-in">
+      断熱の選び方ひとつで<br>
+      <strong>年間5万円以上</strong>変わります。
+    </p>
+    <a href="consumer.html" class="cta-btn fade-in">
+      1分で無料診断する<span class="arrow">&rarr;</span>
+    </a>
+    <div class="cta-trust fade-in">
+      <span><svg><use href="#i-check-circle"/></svg>無料</span>
+      <span><svg><use href="#i-check-circle"/></svg>登録不要</span>
+      <span><svg><use href="#i-check-circle"/></svg>個人情報不要</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PROBLEM ========== -->
+<section class="problem">
+  <div class="wrap">
+    <h2 class="section-title fade-in">2025年、家の省エネが<br>「義務」になりました</h2>
+    <div class="problem-box fade-in">
+      <span class="badge">2025年4月から</span>
+      <h3>すべての新築住宅に<br>省エネ基準への適合が義務化</h3>
+      <p>
+        でも実は、同じ「基準適合」でも<br>
+        断熱のグレードによって<br>
+        光熱費はまったく違います。
+      </p>
+      <span class="emphasis">
+        月1万円以上の差がつくことも
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== BEFORE / AFTER ========== -->
+<section class="compare">
+  <div class="wrap">
+    <h2 class="section-title fade-in">同じ家でもこんなに違う</h2>
+    <p class="section-sub fade-in">断熱グレードで光熱費・快適さ・補助金が変わります</p>
+    <div class="compare-grid">
+      <!-- Cold card -->
+      <div class="compare-card cold fade-in">
+        <div class="card-title">最低限の断熱</div>
+        <div class="compare-row">
+          <div class="label">月の光熱費</div>
+          <div class="value">&yen;28,000</div>
+        </div>
+        <div class="compare-row">
+          <div class="label">冬の廊下</div>
+          <div class="value">5<span class="unit">&deg;C</span></div>
+          <div class="label" style="font-size:11px;color:#94a3b8">息が白い</div>
+        </div>
+        <div class="compare-row">
+          <div class="label">補助金</div>
+          <div class="value" style="font-size:16px">なし</div>
+        </div>
+        <div class="compare-bottom">
+          <div class="label">30年の光熱費</div>
+          <div class="value">&mdash;</div>
+        </div>
+      </div>
+      <!-- Warm card -->
+      <div class="compare-card warm fade-in fade-in-delay-1">
+        <span class="badge-rec">おすすめ</span>
+        <div class="card-title">しっかり断熱</div>
+        <div class="compare-row">
+          <div class="label">月の光熱費</div>
+          <div class="value">&yen;14,000</div>
+        </div>
+        <div class="compare-row">
+          <div class="label">冬の廊下</div>
+          <div class="value">17<span class="unit">&deg;C</span></div>
+          <div class="label" style="font-size:11px;color:#16a34a">快適</div>
+        </div>
+        <div class="compare-row">
+          <div class="label">補助金</div>
+          <div class="value" style="font-size:16px">最大155<span class="unit">万円</span></div>
+        </div>
+        <div class="compare-bottom">
+          <div class="label">30年の光熱費差</div>
+          <div class="value">504万円おトク</div>
+        </div>
+      </div>
+    </div>
+    <p class="compare-note fade-in">※ 東京都、延床面積120m&sup2;の場合の概算値</p>
+  </div>
+</section>
+
+<!-- ========== 3-STEP FLOW ========== -->
+<section class="steps">
+  <div class="wrap">
+    <h2 class="section-title fade-in">たった3ステップ<br>1分で完了</h2>
+    <p class="section-sub fade-in">むずかしい入力は一切ありません</p>
+    <div class="step-flow fade-in">
+      <!-- Step 1 -->
+      <div class="step-item">
+        <div class="step-icon-wrap">
+          <svg><use href="#i-map-pin"/></svg>
+          <span class="step-num">1</span>
+        </div>
+        <h4>建てる場所を選ぶ</h4>
+        <p>都道府県を選択</p>
+      </div>
+      <div class="step-arrow"><svg><use href="#i-chevron-right"/></svg></div>
+      <!-- Step 2 -->
+      <div class="step-item">
+        <div class="step-icon-wrap">
+          <svg><use href="#i-star"/></svg>
+          <span class="step-num">2</span>
+        </div>
+        <h4>断熱グレードを選ぶ</h4>
+        <p>おすすめ表示つき</p>
+      </div>
+      <div class="step-arrow"><svg><use href="#i-chevron-right"/></svg></div>
+      <!-- Step 3 -->
+      <div class="step-item">
+        <div class="step-icon-wrap">
+          <svg><use href="#i-check"/></svg>
+          <span class="step-num">3</span>
+        </div>
+        <h4>結果を確認</h4>
+        <p>光熱費・補助金がわかる</p>
+      </div>
+    </div>
+    <div class="step-result fade-in">
+      光熱費・補助金・快適さが全部わかる
+    </div>
+  </div>
+</section>
+
+<!-- ========== FEATURES ========== -->
+<section class="features">
+  <div class="wrap">
+    <h2 class="section-title fade-in">わかること</h2>
+    <p class="section-sub fade-in">この診断ひとつで6つの情報が手に入ります</p>
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon orange"><svg><use href="#i-wallet"/></svg></div>
+        <h4>月々の光熱費</h4>
+        <p>あなたの家の電気代・ガス代を試算</p>
+      </div>
+      <div class="feature-card fade-in fade-in-delay-1">
+        <div class="feature-icon blue"><svg><use href="#i-thermometer"/></svg></div>
+        <h4>冬の暖かさ</h4>
+        <p>廊下やお風呂場の温度を予測</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon green"><svg><use href="#i-banknote"/></svg></div>
+        <h4>もらえる補助金</h4>
+        <p>ZEH補助金など最大200万円以上</p>
+      </div>
+      <div class="feature-card fade-in fade-in-delay-1">
+        <div class="feature-icon purple"><svg><use href="#i-chart"/></svg></div>
+        <h4>投資回収</h4>
+        <p>断熱にかけたお金は何年で元が取れるか</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon teal"><svg><use href="#i-leaf"/></svg></div>
+        <h4>環境への貢献</h4>
+        <p>CO2削減量を「杉の木○本分」で表示</p>
+      </div>
+      <div class="feature-card fade-in fade-in-delay-1">
+        <div class="feature-icon amber"><svg><use href="#i-star"/></svg></div>
+        <h4>住宅の評価</h4>
+        <p>あなたの家の断熱レベルを星で評価</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SOCIAL PROOF / STATS ========== -->
+<section class="proof">
+  <div class="wrap">
+    <h2 class="section-title fade-in">なぜ今、断熱が重要なのか</h2>
+    <p class="section-sub fade-in">数字が物語る、住宅省エネの現状</p>
+    <div class="stats-grid">
+      <div class="stat-card fade-in">
+        <div class="stat-number" data-count="79">0<span class="stat-unit">万戸/年</span></div>
+        <div class="stat-label">全新築に省エネ基準が義務化</div>
+      </div>
+      <div class="stat-card fade-in fade-in-delay-1">
+        <div class="stat-number" data-count="5">0<span class="stat-unit">万円/年</span></div>
+        <div class="stat-label">断熱グレードによる光熱費の差</div>
+      </div>
+      <div class="stat-card fade-in fade-in-delay-2">
+        <div class="stat-number" data-count="200">0<span class="stat-unit">万円</span></div>
+        <div class="stat-label">政府の省エネ住宅補助金（最大）</div>
+      </div>
+      <div class="stat-card fade-in fade-in-delay-3">
+        <div class="stat-number" data-count="19000" data-comma="true">0<span class="stat-unit">人/年</span></div>
+        <div class="stat-label">ヒートショック関連の死亡者数（推計）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section class="faq">
+  <div class="wrap">
+    <h2 class="section-title fade-in">よくある質問</h2>
+    <p class="section-sub fade-in">気になるポイントをまとめました</p>
+    <ul class="faq-list fade-in">
+      <li class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          本当に無料ですか？
+          <svg><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">はい、完全無料です。登録もメールアドレスも不要です。</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          計算結果は正確ですか？
+          <svg><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">国の省エネ基準に準拠した計算方法を使用しています。ただし概算値のため、正式な確認申請には別途正式プログラムが必要です。</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          スマホでも使えますか？
+          <svg><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">はい、スマホ・タブレット・PCすべてで利用可能です。</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          個人情報は必要ですか？
+          <svg><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">一切不要です。名前もメールアドレスも入力しません。</div></div>
+      </li>
+      <li class="faq-item">
+        <button class="faq-q" aria-expanded="false">
+          リフォームにも対応していますか？
+          <svg><use href="#i-chevron-down"/></svg>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">はい、新築とリフォームの両方に対応しています。築年数を選ぶだけで現在の断熱性能を推定し、改善効果をシミュレーションします。</div></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========== FINAL CTA ========== -->
+<section class="final-cta">
+  <div class="wrap">
+    <h2 class="fade-in">あなたの家の省エネ性能、<br>今すぐ確認しませんか？</h2>
+    <a href="consumer.html" class="cta-btn fade-in">
+      無料で診断する<span class="arrow">&rarr;</span>
+    </a>
+    <p class="small fade-in">1分で完了。登録不要。</p>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="site-footer">
+  <div class="footer-brand">EneCheck</div>
+  <div class="footer-desc">住宅省エネ診断ツール</div>
+  <a href="index.html" class="footer-link">工務店・設計者の方はこちら &rarr;</a>
+  <div class="footer-copy">&copy; 2026 EneCheck</div>
+</footer>
+
+<!-- ========== SCRIPTS ========== -->
+<script>
+(function(){
+  // ---- Fade-in on scroll (IntersectionObserver) ----
+  var fadeEls = document.querySelectorAll('.fade-in');
+  if('IntersectionObserver' in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    },{threshold:0.15,rootMargin:'0px 0px -40px 0px'});
+    fadeEls.forEach(function(el){obs.observe(el)});
+  } else {
+    fadeEls.forEach(function(el){el.classList.add('visible')});
+  }
+
+  // ---- FAQ accordion ----
+  document.querySelectorAll('.faq-q').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var item = btn.closest('.faq-item');
+      var isOpen = item.classList.contains('open');
+      // close all
+      document.querySelectorAll('.faq-item.open').forEach(function(it){
+        it.classList.remove('open');
+        it.querySelector('.faq-q').setAttribute('aria-expanded','false');
+      });
+      // toggle clicked
+      if(!isOpen){
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+  });
+
+  // ---- Number count-up on stats ----
+  var counted = false;
+  function formatNum(n,useComma){
+    if(!useComma) return String(n);
+    return n.toLocaleString('ja-JP');
+  }
+  function countUp(){
+    if(counted) return;
+    var statEls = document.querySelectorAll('.stat-number[data-count]');
+    if(!statEls.length) return;
+    counted = true;
+    statEls.forEach(function(el){
+      var target = parseInt(el.getAttribute('data-count'),10);
+      var useComma = el.getAttribute('data-comma')==='true';
+      var unitSpan = el.querySelector('.stat-unit');
+      var unitHTML = unitSpan ? unitSpan.outerHTML : '';
+      var duration = 1200;
+      var start = performance.now();
+      function tick(now){
+        var elapsed = now - start;
+        var progress = Math.min(elapsed/duration,1);
+        // ease out cubic
+        var eased = 1 - Math.pow(1-progress,3);
+        var current = Math.round(target * eased);
+        el.innerHTML = formatNum(current,useComma) + unitHTML;
+        if(progress<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  // Trigger count-up when stats section is visible
+  var proofSection = document.querySelector('.proof');
+  if(proofSection && 'IntersectionObserver' in window){
+    var statObs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          countUp();
+          statObs.unobserve(e.target);
+        }
+      });
+    },{threshold:0.3});
+    statObs.observe(proofSection);
+  }
+})();
+</script>
+</body>
+</html>

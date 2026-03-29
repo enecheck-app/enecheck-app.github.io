@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EneCheck スポンサーシップのご提案</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0f172a;
+  --bg-card: rgba(255,255,255,0.04);
+  --accent: #3b82f6;
+  --accent-light: #60a5fa;
+  --white: #ffffff;
+  --gray: #94a3b8;
+  --border: rgba(255,255,255,0.08);
+  --gold: #f59e0b;
+  --silver: #94a3b8;
+  --bronze: #d97706;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* Slide container */
+.slide-container {
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+.slide {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 80px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(30px);
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.slide-inner {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Typography */
+.slide-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-light);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+}
+.slide h1 {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+.slide h2 {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+}
+.slide h3 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.slide p, .slide li {
+  font-size: 22px;
+  line-height: 1.8;
+  color: var(--gray);
+}
+.slide .highlight {
+  color: var(--accent-light);
+  font-weight: 700;
+}
+.slide .big-number {
+  font-size: 72px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+.slide .big-number span {
+  font-size: 32px;
+  color: var(--gray);
+}
+
+/* Grid layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 40px;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+
+/* Cards */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px 28px;
+}
+.card h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: var(--white);
+}
+.card p {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Stat cards */
+.stat-card {
+  text-align: center;
+  padding: 32px 16px;
+}
+.stat-card .big-number {
+  font-size: 56px;
+  margin-bottom: 8px;
+}
+.stat-card p {
+  font-size: 16px;
+  color: var(--gray);
+}
+
+/* Plan cards */
+.plan-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px 28px;
+  text-align: center;
+  transition: border-color 0.3s;
+}
+.plan-card.gold { border-color: var(--gold); }
+.plan-card.silver { border-color: var(--silver); }
+.plan-card.bronze { border-color: var(--bronze); }
+.plan-tier {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 8px;
+}
+.plan-card.gold .plan-tier { color: var(--gold); }
+.plan-card.silver .plan-tier { color: var(--silver); }
+.plan-card.bronze .plan-tier { color: var(--bronze); }
+.plan-price {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.plan-period {
+  font-size: 14px;
+  color: var(--gray);
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.plan-features {
+  list-style: none;
+  text-align: left;
+}
+.plan-features li {
+  font-size: 15px;
+  padding: 6px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.plan-features li::before {
+  content: "\2713";
+  color: var(--accent-light);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Compare table */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 32px;
+  font-size: 17px;
+}
+.compare-table th {
+  text-align: left;
+  padding: 14px 16px;
+  font-weight: 700;
+  color: var(--white);
+  border-bottom: 2px solid var(--border);
+  font-size: 16px;
+}
+.compare-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--gray);
+  font-size: 16px;
+}
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table .check { color: var(--accent-light); font-weight: 700; }
+.compare-table .cross { color: #64748b; }
+.compare-table .enecheck-col {
+  background: rgba(59,130,246,0.06);
+}
+.compare-table th.enecheck-col {
+  color: var(--accent-light);
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  gap: 0;
+  margin-top: 48px;
+  position: relative;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 24px;
+  left: 40px;
+  right: 40px;
+  height: 3px;
+  background: var(--border);
+}
+.timeline-step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+.timeline-dot {
+  width: 48px;
+  height: 48px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 auto 16px;
+  position: relative;
+  z-index: 1;
+}
+.timeline-step h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--white);
+}
+.timeline-step p {
+  font-size: 15px;
+  color: var(--gray);
+  line-height: 1.5;
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+/* Navigation */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background: linear-gradient(transparent, var(--bg));
+}
+.nav-dots {
+  display: flex;
+  gap: 8px;
+}
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  border: none;
+}
+.nav-dot.active {
+  background: var(--accent);
+  transform: scale(1.3);
+}
+.nav-hint {
+  font-size: 13px;
+  color: #475569;
+}
+.nav-arrows {
+  display: flex;
+  gap: 8px;
+}
+.nav-arrows button {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04);
+  color: var(--gray);
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-arrows button:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--white);
+}
+
+/* Title slide special */
+.title-slide {
+  text-align: center;
+}
+.title-slide h1 {
+  font-size: 56px;
+}
+.title-slide .subtitle {
+  font-size: 24px;
+  color: var(--gray);
+  margin-bottom: 48px;
+}
+.title-slide .meta {
+  font-size: 16px;
+  color: #475569;
+}
+
+/* Contact slide */
+.contact-slide { text-align: center; }
+.contact-info {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 40px;
+  text-align: left;
+}
+.contact-info a {
+  color: var(--accent-light);
+  text-decoration: none;
+  font-size: 22px;
+}
+.contact-info a:hover { text-decoration: underline; }
+
+/* Bullet list */
+.slide ul:not(.plan-features) {
+  list-style: none;
+  margin-top: 20px;
+}
+.slide ul:not(.plan-features) li {
+  padding: 8px 0;
+  padding-left: 28px;
+  position: relative;
+}
+.slide ul:not(.plan-features) li::before {
+  content: "\25B8";
+  position: absolute;
+  left: 0;
+  color: var(--accent-light);
+}
+
+@media (max-width: 900px) {
+  .slide { padding: 40px 24px; }
+  .slide h1 { font-size: 36px; }
+  .slide h2 { font-size: 30px; }
+  .slide p, .slide li { font-size: 17px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .timeline { flex-direction: column; gap: 24px; }
+  .timeline::before { display: none; }
+  .compare-table { font-size: 13px; }
+  .compare-table th, .compare-table td { padding: 10px 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="slide-container">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active title-slide" data-slide="0">
+    <div class="slide-inner">
+      <div class="slide-label">Confidential</div>
+      <h1>EneCheck<br>スポンサーシップのご提案</h1>
+      <p class="subtitle">省エネ計算ツールを通じた、新しい建材マーケティング</p>
+      <p class="meta">2025年 | 建材メーカー様向けご提案資料</p>
+    </div>
+  </div>
+
+  <!-- Slide 2: Market Opportunity -->
+  <div class="slide" data-slide="1">
+    <div class="slide-inner">
+      <div class="slide-label">Market Opportunity</div>
+      <h2>2025年、省エネ計算は「全棟必須」になる</h2>
+      <p>建築物省エネ法改正により、2025年4月からすべての新築住宅に省エネ基準適合が義務化されます。</p>
+      <div class="grid-3">
+        <div class="stat-card card">
+          <div class="big-number">79<span>万戸</span></div>
+          <p>年間新築着工戸数</p>
+        </div>
+        <div class="stat-card card">
+          <div class="big-number">316<span>億円</span></div>
+          <p>省エネ計算の潜在市場規模</p>
+        </div>
+        <div class="stat-card card">
+          <div class="big-number">100<span>%</span></div>
+          <p>義務化対象率(2025年4月〜)</p>
+        </div>
+      </div>
+      <p style="margin-top:32px; font-size:18px;">すべての工務店が省エネ計算ツールを必要とする時代。<span class="highlight">建材選定の意思決定が、ツール上で行われる</span>ようになります。</p>
+    </div>
+  </div>
+
+  <!-- Slide 3: What is EneCheck -->
+  <div class="slide" data-slide="2">
+    <div class="slide-inner">
+      <div class="slide-label">Product</div>
+      <h2>EneCheckとは</h2>
+      <p>ブラウザだけで動く、完全無料の省エネ計算ツール。</p>
+      <div class="grid-2" style="margin-top:36px;">
+        <div>
+          <ul>
+            <li><span class="highlight">26以上の機能</span>を単一HTMLファイルに凝縮</li>
+            <li>インストール不要、インターネット接続のみで利用可能</li>
+            <li>UA値・eta_A値の自動計算</li>
+            <li>光熱費の年間シミュレーション</li>
+            <li>補助金の自動判定・金額算出</li>
+            <li>体感温度マップで施主に直感的に提案</li>
+          </ul>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+          <div class="big-number" style="font-size:80px;">1</div>
+          <p style="font-size:20px;color:var(--white);margin-top:12px;font-weight:700;">単一HTMLファイル</p>
+          <p style="font-size:16px;margin-top:8px;">サーバー不要。ダウンロードしてオフラインでも動作。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: User Experience -->
+  <div class="slide" data-slide="3">
+    <div class="slide-inner">
+      <div class="slide-label">User Experience</div>
+      <h2>工務店の体験フロー</h2>
+      <p>断熱材を変えるだけで、すべての数値がリアルタイムに変化します。</p>
+      <div class="grid-4" style="margin-top:48px;">
+        <div class="card" style="text-align:center;">
+          <div style="font-size:36px;margin-bottom:12px;">&#128204;</div>
+          <h3 style="font-size:17px;">Step 1</h3>
+          <p style="font-size:15px;">地域・間取りを選択</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:36px;margin-bottom:12px;">&#127959;</div>
+          <h3 style="font-size:17px;">Step 2</h3>
+          <p style="font-size:15px;">断熱材・窓を選択<br><span class="highlight" style="font-size:13px;">ここに御社製品が表示</span></p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:36px;margin-bottom:12px;">&#9889;</div>
+          <h3 style="font-size:17px;">Step 3</h3>
+          <p style="font-size:15px;">UA値・光熱費・補助金が即座に計算</p>
+        </div>
+        <div class="card" style="text-align:center;">
+          <div style="font-size:36px;margin-bottom:12px;">&#128196;</div>
+          <h3 style="font-size:17px;">Step 4</h3>
+          <p style="font-size:15px;">提案書・申請書類を出力<br><span class="highlight" style="font-size:13px;">製品名が印刷される</span></p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:36px;text-align:center;border-color:var(--accent);background:rgba(59,130,246,0.04);">
+        <p style="font-size:20px;color:var(--white);font-weight:700;">工務店が断熱材を選ぶ「その瞬間」に、御社製品の効果が数値で伝わります。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: Sponsor Benefits -->
+  <div class="slide" data-slide="4">
+    <div class="slide-inner">
+      <div class="slide-label">Benefits</div>
+      <h2>スポンサーメリット</h2>
+      <div class="grid-2" style="margin-top:36px;">
+        <div class="card">
+          <h3>&#127942; 製品がデフォルト選択肢に</h3>
+          <p>断熱材・窓の選択画面で御社製品をデフォルト表示。最初に目に入る製品が選ばれやすい「デフォルト効果」を活用できます。</p>
+        </div>
+        <div class="card">
+          <h3>&#128196; 計算書に製品名を印刷</h3>
+          <p>施主への提案書・申請書類に御社の製品名が記載されます。工務店から施主への推薦として機能します。</p>
+        </div>
+        <div class="card">
+          <h3>&#128200; 選択データの取得</h3>
+          <p>御社製品の選択率、競合比較データ、地域別採用傾向などを月次レポートで提供。マーケティング戦略に活用できます。</p>
+        </div>
+        <div class="card">
+          <h3>&#127760; pSEOによる集客</h3>
+          <p>「地域名+省エネ計算」で37ページを展開。検索流入した工務店に御社製品が自然に露出されます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: Sponsor Plans -->
+  <div class="slide" data-slide="5">
+    <div class="slide-inner">
+      <div class="slide-label">Plans</div>
+      <h2>スポンサープラン</h2>
+      <div class="grid-3" style="margin-top:36px;">
+        <div class="plan-card gold">
+          <div class="plan-tier">Gold</div>
+          <div class="plan-price">1,000万円</div>
+          <div class="plan-period">年額 (税別)</div>
+          <ul class="plan-features">
+            <li>全画面で御社製品を優先表示</li>
+            <li>デフォルト選択肢に設定</li>
+            <li>計算書にロゴ・製品名印刷</li>
+            <li>月次詳細レポート</li>
+            <li>pSEOページにバナー掲載</li>
+            <li>共同ウェビナー開催権</li>
+            <li>専任アカウントマネージャー</li>
+          </ul>
+        </div>
+        <div class="plan-card silver">
+          <div class="plan-tier">Silver</div>
+          <div class="plan-price">500万円</div>
+          <div class="plan-period">年額 (税別)</div>
+          <ul class="plan-features">
+            <li>製品リストへの追加掲載</li>
+            <li>選択画面に「推奨」バッジ表示</li>
+            <li>計算書に製品名印刷</li>
+            <li>四半期レポート</li>
+            <li>製品データの優先更新</li>
+          </ul>
+        </div>
+        <div class="plan-card bronze">
+          <div class="plan-tier">Bronze</div>
+          <div class="plan-price">200万円</div>
+          <div class="plan-period">年額 (税別)</div>
+          <ul class="plan-features">
+            <li>製品リストへの掲載</li>
+            <li>製品スペックの表示</li>
+            <li>半期レポート</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Competitive Comparison -->
+  <div class="slide" data-slide="6">
+    <div class="slide-inner">
+      <div class="slide-label">Comparison</div>
+      <h2>競合ツールとの比較</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:25%;">項目</th>
+            <th class="enecheck-col" style="width:25%;">EneCheck</th>
+            <th style="width:17%;">house.lowenergy</th>
+            <th style="width:17%;">ホームズ君</th>
+            <th style="width:16%;">ARCHITREND</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>価格</td>
+            <td class="enecheck-col"><span class="check">無料</span></td>
+            <td>無料</td>
+            <td>年15万円〜</td>
+            <td>年50万円〜</td>
+          </tr>
+          <tr>
+            <td>インストール</td>
+            <td class="enecheck-col"><span class="check">不要</span></td>
+            <td>不要</td>
+            <td>必要</td>
+            <td>必要</td>
+          </tr>
+          <tr>
+            <td>計算速度</td>
+            <td class="enecheck-col"><span class="check">30秒</span></td>
+            <td>5分</td>
+            <td>30分〜</td>
+            <td>1時間〜</td>
+          </tr>
+          <tr>
+            <td>製品PR機能</td>
+            <td class="enecheck-col"><span class="check">スポンサー枠あり</span></td>
+            <td><span class="cross">不可</span></td>
+            <td><span class="cross">不可</span></td>
+            <td><span class="cross">不可</span></td>
+          </tr>
+          <tr>
+            <td>選択データ提供</td>
+            <td class="enecheck-col"><span class="check">月次レポート</span></td>
+            <td><span class="cross">なし</span></td>
+            <td><span class="cross">なし</span></td>
+            <td><span class="cross">なし</span></td>
+          </tr>
+          <tr>
+            <td>施主向け可視化</td>
+            <td class="enecheck-col"><span class="check">体感温度マップ</span></td>
+            <td>限定的</td>
+            <td>あり</td>
+            <td>あり</td>
+          </tr>
+          <tr>
+            <td>デフォルト製品設定</td>
+            <td class="enecheck-col"><span class="check">対応(Gold)</span></td>
+            <td><span class="cross">不可</span></td>
+            <td><span class="cross">不可</span></td>
+            <td><span class="cross">不可</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:28px;font-size:18px;"><span class="highlight">EneCheckだけが「建材メーカーの製品PR」に対応</span>した省エネ計算ツールです。</p>
+    </div>
+  </div>
+
+  <!-- Slide 8: Timeline -->
+  <div class="slide" data-slide="7">
+    <div class="slide-inner">
+      <div class="slide-label">Schedule</div>
+      <h2>導入スケジュール</h2>
+      <p>ご契約から最短4週間で公開可能です。</p>
+      <div class="timeline">
+        <div class="timeline-step">
+          <div class="timeline-dot">1</div>
+          <h4>ご契約</h4>
+          <p>プラン選定 契約締結</p>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot">2</div>
+          <h4>製品データ連携</h4>
+          <p>熱貫流率等のスペックデータを登録</p>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot">3</div>
+          <h4>表示確認・公開</h4>
+          <p>表示内容を確認後 本番環境に反映</p>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot">4</div>
+          <h4>レポート開始</h4>
+          <p>選択データの 月次レポートを配信</p>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top:48px;">
+        <div class="card">
+          <h3 style="font-size:18px;">必要なデータ</h3>
+          <ul style="margin-top:8px;">
+            <li style="font-size:16px;">製品名・型番一覧</li>
+            <li style="font-size:16px;">熱貫流率 (U値)</li>
+            <li style="font-size:16px;">製品カテゴリ (断熱材/窓/設備)</li>
+            <li style="font-size:16px;">ロゴ画像 (Goldプラン)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="font-size:18px;">サポート体制</h3>
+          <ul style="margin-top:8px;">
+            <li style="font-size:16px;">専任担当者によるオンボーディング</li>
+            <li style="font-size:16px;">データ入力の代行対応</li>
+            <li style="font-size:16px;">四半期ごとの戦略ミーティング</li>
+            <li style="font-size:16px;">製品データの随時更新</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9: Track Record -->
+  <div class="slide" data-slide="8">
+    <div class="slide-inner">
+      <div class="slide-label">Data</div>
+      <h2>実績とデータ</h2>
+      <div class="grid-2" style="margin-top:36px;">
+        <div>
+          <div class="card" style="margin-bottom:24px;">
+            <h3 style="font-size:18px;">pSEO展開</h3>
+            <div class="big-number" style="font-size:56px;margin:16px 0 8px;">37<span>ページ</span></div>
+            <p style="font-size:16px;">「都道府県名+省エネ計算」で上位表示を狙う地域特化ページを展開。各地域の工務店に直接リーチします。</p>
+          </div>
+          <div class="card">
+            <h3 style="font-size:18px;">ターゲットユーザー</h3>
+            <ul style="margin-top:8px;">
+              <li style="font-size:16px;">中小工務店 (年間10〜100棟)</li>
+              <li style="font-size:16px;">設計事務所</li>
+              <li style="font-size:16px;">リフォーム会社</li>
+              <li style="font-size:16px;">住宅営業担当者</li>
+            </ul>
+          </div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:24px;">
+            <h3 style="font-size:18px;">検索流入見込み</h3>
+            <ul style="margin-top:12px;">
+              <li style="font-size:16px;">「省エネ計算 無料」月間検索 1,200回</li>
+              <li style="font-size:16px;">「UA値 計算」月間検索 2,400回</li>
+              <li style="font-size:16px;">「省エネ基準 義務化」月間検索 3,600回</li>
+              <li style="font-size:16px;">地域名+省エネ計算: 合計 5,000回/月</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3 style="font-size:18px;">想定リーチ</h3>
+            <div style="margin-top:16px;">
+              <p style="font-size:16px;">月間ユニークユーザー(6ヶ月後目標)</p>
+              <div class="big-number" style="font-size:48px;margin:8px 0;">5,000<span>UU</span></div>
+              <p style="font-size:16px;">月間計算実行回数(6ヶ月後目標)</p>
+              <div class="big-number" style="font-size:48px;margin:8px 0;">15,000<span>回</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: Contact -->
+  <div class="slide contact-slide" data-slide="9">
+    <div class="slide-inner">
+      <div class="slide-label">Contact</div>
+      <h1>お問い合わせ</h1>
+      <p style="font-size:22px;max-width:600px;margin:0 auto;">スポンサーシップにご興味をお持ちいただきありがとうございます。<br>まずはお気軽にご連絡ください。</p>
+      <div class="contact-info" style="align-items:center;margin-top:48px;">
+        <a href="mailto:info@enecheck.jp" style="font-size:28px;font-weight:700;">info@enecheck.jp</a>
+        <p style="font-size:18px;color:var(--gray);margin-top:16px;">オンラインミーティングも対応可能です。</p>
+      </div>
+      <div style="margin-top:64px;padding-top:32px;border-top:1px solid var(--border);">
+        <p style="font-size:14px;color:#475569;">本資料は機密情報を含みます。無断転載・配布はご遠慮ください。</p>
+        <p style="font-size:14px;color:#475569;margin-top:4px;">&copy; 2025 EneCheck. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation -->
+<div class="nav-bar">
+  <div class="nav-dots" id="navDots"></div>
+  <div class="nav-hint">← → キーで操作</div>
+  <div class="nav-arrows">
+    <button onclick="navigate(-1)" aria-label="Previous slide">&#8592;</button>
+    <button onclick="navigate(1)" aria-label="Next slide">&#8594;</button>
+  </div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.getElementById('navDots');
+let current = 0;
+
+// Create dots
+slides.forEach((_, i) => {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.addEventListener('click', () => goTo(i));
+  dot.setAttribute('aria-label', 'Slide ' + (i + 1));
+  dotsContainer.appendChild(dot);
+});
+
+function goTo(index) {
+  if (index < 0 || index >= slides.length) return;
+  slides[current].classList.remove('active');
+  dotsContainer.children[current].classList.remove('active');
+  current = index;
+  slides[current].classList.add('active');
+  dotsContainer.children[current].classList.add('active');
+}
+
+function navigate(dir) {
+  goTo(current + dir);
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault();
+    navigate(1);
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    navigate(-1);
+  } else if (e.key === 'Home') {
+    e.preventDefault();
+    goTo(0);
+  } else if (e.key === 'End') {
+    e.preventDefault();
+    goTo(slides.length - 1);
+  }
+});
+
+// Touch support
+let touchStartY = 0;
+let touchStartX = 0;
+document.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+});
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+    navigate(dx < 0 ? 1 : -1);
+  }
+});
+</script>
+</body>
+</html>

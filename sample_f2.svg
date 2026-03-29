@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8000 10000" width="800" height="1000">
+  <!-- 2F Floor Plan - 8m x 10m, Units: mm -->
+  <rect x="0" y="0" width="8000" height="10000" fill="none" stroke="black" stroke-width="30"/>
+  <text x="4000" y="-100" text-anchor="middle" font-size="250" font-weight="bold">2F 平面図</text>
+  <!-- 主寝室 5m x 4m -->
+  <rect x="0" y="0" width="5000" height="4000" fill="none" stroke="black" stroke-width="15"/>
+  <text x="2500" y="2000" text-anchor="middle" font-size="250">主寝室</text>
+  <!-- 子供部屋1 3m x 4m -->
+  <rect x="5000" y="0" width="3000" height="4000" fill="none" stroke="black" stroke-width="15"/>
+  <text x="6500" y="2000" text-anchor="middle" font-size="200">子供部屋1</text>
+  <!-- 子供部屋2 4m x 3m -->
+  <rect x="0" y="4000" width="4000" height="3000" fill="none" stroke="black" stroke-width="15"/>
+  <text x="2000" y="5500" text-anchor="middle" font-size="200">子供部屋2</text>
+  <!-- 廊下+トイレ+洗面 -->
+  <rect x="4000" y="4000" width="4000" height="6000" fill="none" stroke="black" stroke-width="15"/>
+  <text x="6000" y="7000" text-anchor="middle" font-size="200">廊下等</text>
+  <rect x="0" y="7000" width="4000" height="3000" fill="none" stroke="black" stroke-width="15"/>
+  <text x="2000" y="8500" text-anchor="middle" font-size="200">WIC</text>
+</svg>

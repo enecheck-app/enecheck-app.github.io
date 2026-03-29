@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EneCheck 簡易計算ウィジェット</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,'Hiragino Kaku Gothic ProN','Meiryo',sans-serif;font-size:14px;line-height:1.5;color:#1e293b;background:#fff;padding:16px;max-width:420px;margin:0 auto}
+.mono{font-family:'SF Mono',ui-monospace,Consolas,monospace}
+h2{font-size:14px;font-weight:700;color:#334155;margin:16px 0 8px;padding-bottom:4px;border-bottom:2px solid #e2e8f0}
+.section{margin-bottom:12px}
+.section-label{font-size:12px;font-weight:700;color:#64748b;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.section-icon{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;font-size:10px;border-radius:4px;color:#fff;font-weight:800;flex-shrink:0}
+select{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:13px;font-family:inherit;background:#fff;color:#1e293b;cursor:pointer}
+select:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,0.15)}
+.bg{display:flex;flex-wrap:wrap;gap:4px}
+.bo{padding:6px 10px;font-size:11px;font-family:inherit;border:1px solid #cbd5e1;background:#f8fafc;color:#475569;cursor:pointer;border-radius:5px;transition:all 0.15s;line-height:1.3;white-space:nowrap}
+.bo:hover{background:#e2e8f0;border-color:#94a3b8}
+.bo.on{background:#3b82f6;color:#fff;border-color:#2563eb;font-weight:700}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+.result-card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px;text-align:center;transition:all 0.3s}
+.result-card.pass{border-color:#16a34a;background:#f0fdf4}
+.result-card.fail{border-color:#dc2626;background:#fef2f2}
+.result-card.wide{grid-column:1/-1}
+.rc-label{font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.3px}
+.rc-value{font-size:24px;font-weight:900;font-family:'SF Mono',ui-monospace,monospace;margin:2px 0;letter-spacing:-0.5px}
+.rc-value.pass{color:#16a34a}
+.rc-value.fail{color:#dc2626}
+.rc-value.neutral{color:#1e293b}
+.rc-sub{font-size:10px;color:#94a3b8}
+.subsidy-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px;margin:10px 0}
+.subsidy-box .sb-title{font-size:12px;font-weight:700;color:#16a34a;margin-bottom:4px}
+.subsidy-box .sb-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:3px 0;border-bottom:1px solid #dcfce7}
+.subsidy-box .sb-row:last-child{border-bottom:none}
+.subsidy-box .sb-amt{font-weight:700;font-family:'SF Mono',monospace;color:#16a34a}
+.subsidy-box .sb-total{font-size:14px;font-weight:800;color:#16a34a;margin-top:6px;text-align:right}
+.cta{display:block;background:#3b82f6;color:#fff;padding:14px 20px;border-radius:8px;text-align:center;font-size:15px;font-weight:700;text-decoration:none;margin:14px 0 8px;transition:background 0.2s;border:none;cursor:pointer;width:100%}
+.cta:hover{background:#2563eb}
+.cta-sub{font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px;font-weight:400}
+.cta-aff{display:block;background:#16a34a;color:#fff;padding:14px 20px;border-radius:8px;text-align:center;font-size:15px;font-weight:700;text-decoration:none;margin:8px 0;transition:background 0.2s;border:none;cursor:pointer;width:100%}
+.cta-aff:hover{background:#15803d}
+#affiliate-area{margin:10px 0;min-height:20px}
+.powered{text-align:center;font-size:10px;color:#94a3b8;margin-top:8px;padding-top:8px;border-top:1px solid #e2e8f0}
+.powered a{color:#3b82f6;text-decoration:none;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="section">
+  <div class="section-label"><span class="section-icon" style="background:#3b82f6">地</span> 地域区分</div>
+  <select id="regionSel" onchange="recalc()">
+    <option value="1">1地域（旭川）</option>
+    <option value="2">2地域（札幌）</option>
+    <option value="3">3地域（盛岡）</option>
+    <option value="4">4地域（仙台）</option>
+    <option value="5">5地域（つくば）</option>
+    <option value="6" selected>6地域（東京）</option>
+    <option value="7">7地域（鹿児島）</option>
+    <option value="8">8地域（那覇）</option>
+  </select>
+</div>
+
+<div class="section">
+  <div class="section-label"><span class="section-icon" style="background:#5b8c3e">壁</span> 外壁断熱</div>
+  <div class="bg" id="wallG">
+    <button class="bo" data-r="2.22" onclick="pk(this)">GW16K 100mm</button>
+    <button class="bo" data-r="2.63" onclick="pk(this)">GW24K 100mm</button>
+    <button class="bo on" data-r="3.00" onclick="pk(this)">高性能GW 105mm</button>
+    <button class="bo" data-r="4.55" onclick="pk(this)">フェノール100mm</button>
+    <button class="bo" data-r="1.96" onclick="pk(this)">ネオマ45mm</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label"><span class="section-icon" style="background:#3b7fb5">天</span> 天井断熱</div>
+  <div class="bg" id="ceilG">
+    <button class="bo" data-r="2.22" onclick="pk(this)">GW16K 100mm</button>
+    <button class="bo on" data-r="4.44" onclick="pk(this)">GW16K 200mm</button>
+    <button class="bo" data-r="6.67" onclick="pk(this)">GW16K 300mm</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label"><span class="section-icon" style="background:#b5833b">床</span> 床断熱</div>
+  <div class="bg" id="floorG">
+    <button class="bo" data-r="1.79" onclick="pk(this)">XPS3種 50mm</button>
+    <button class="bo on" data-r="3.57" onclick="pk(this)">XPS3種 100mm</button>
+    <button class="bo" data-r="4.55" onclick="pk(this)">フェノール100mm</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label"><span class="section-icon" style="background:#7b3bb5">窓</span> 窓（開口部）</div>
+  <div class="bg" id="winG">
+    <button class="bo" data-u="4.65" onclick="pk(this)">アルミ+複層</button>
+    <button class="bo on" data-u="2.33" onclick="pk(this)">複合Low-E</button>
+    <button class="bo" data-u="1.90" onclick="pk(this)">樹脂Low-E</button>
+    <button class="bo" data-u="1.30" onclick="pk(this)">樹脂トリプル</button>
+  </div>
+</div>
+
+<h2>計算結果</h2>
+
+<div class="result-grid">
+  <div class="result-card" id="cardUA">
+    <div class="rc-label">UA値</div>
+    <div class="rc-value mono" id="uaVal">--</div>
+    <div class="rc-sub" id="uaStd">基準: -- 以下</div>
+  </div>
+  <div class="result-card" id="cardGrade">
+    <div class="rc-label">断熱等級</div>
+    <div class="rc-value" id="gradeVal">--</div>
+    <div class="rc-sub" id="gradeSub"></div>
+  </div>
+  <div class="result-card" id="cardCost">
+    <div class="rc-label">年間光熱費（概算）</div>
+    <div class="rc-value neutral mono" id="costVal">--</div>
+    <div class="rc-sub" id="costSub">月額 --</div>
+  </div>
+  <div class="result-card" id="cardSaving">
+    <div class="rc-label">基準仕様比 削減</div>
+    <div class="rc-value pass mono" id="savingVal">--</div>
+    <div class="rc-sub" id="savingSub">--</div>
+  </div>
+</div>
+
+<div class="subsidy-box" id="subsidyBox">
+  <div class="sb-title">適合する補助金・優遇制度</div>
+  <div id="subsidyList"></div>
+  <div class="sb-total" id="subsidyTotal"></div>
+</div>
+
+<a class="cta" href="../index.html" target="_top" id="ctaMain">
+  詳細計算はこちら &rarr; EneCheck
+  <div class="cta-sub">断熱・設備・光熱費・補助金を一括シミュレーション</div>
+</a>
+
+<a class="cta-aff" href="https://townlife-aff.com" target="_blank" rel="noopener" id="ctaAff">
+  タウンライフで無料見積もり
+  <div class="cta-sub" style="color:rgba(255,255,255,0.85)">複数社の断熱リフォーム見積もりを無料で比較</div>
+</a>
+
+<div id="affiliate-area">
+  <!-- Affiliate banners can be inserted here -->
+</div>
+
+<div class="powered">
+  計算エンジン: <a href="../index.html" target="_top">EneCheck</a> | 2025年省エネ基準準拠
+</div>
+
+<script>
+// ================================================================
+// DATA TABLES
+// ================================================================
+var UA_STD={1:0.46,2:0.46,3:0.56,4:0.75,5:0.87,6:0.87,7:0.87,8:null};
+var ZEH_STD={1:0.40,2:0.40,3:0.50,4:0.60,5:0.60,6:0.60,7:0.60};
+var GRADE_UA={
+  4:{1:0.46,2:0.46,3:0.56,4:0.75,5:0.87,6:0.87,7:0.87,8:null},
+  5:{1:0.40,2:0.40,3:0.50,4:0.60,5:0.60,6:0.60,7:0.60,8:null},
+  6:{1:0.28,2:0.28,3:0.28,4:0.34,5:0.46,6:0.46,7:0.46,8:null},
+  7:{1:0.20,2:0.20,3:0.20,4:0.23,5:0.26,6:0.26,7:0.26,8:null}
+};
+var PE_STD_ABS={
+  heat:{1:67200,2:57600,3:42500,4:36900,5:22100,6:16800,7:10200,8:2100},
+  cool:{1:2400,2:3200,3:4800,4:5900,5:8500,6:10500,7:14200,8:22500},
+  vent:{1:5800,2:5500,3:5200,4:5000,5:4800,6:4700,7:4600,8:4500},
+  hw:  {1:28500,2:27600,3:26800,4:26200,5:25200,6:24600,7:23400,8:22000},
+  light:{1:8900,2:8900,3:8900,4:8900,5:8900,6:8900,7:8900,8:8900},
+  other:{1:21241,2:21241,3:21241,4:21241,5:21241,6:21241,7:21241,8:21241}
+};
+
+// Model house 120m2 2F
+var PRESET={area:120,envArea:310,wallA:120,ceilA:60,floorA:60,winA:21,doorA:3.5};
+
+// Cost data (per m2 difference from baseline GW16K)
+var MAT_COST_WALL={1.96:1500,2.22:0,2.63:300,3.00:800,4.55:2800};
+var MAT_COST_WIN={4.65:0,2.33:13000,1.90:25000,1.30:45000};
+
+// Energy conversion
+var ELEC_PEF=9.76;
+var GAS_PEF=45;
+function ELEC_RATE(kwh){var c=14400;if(kwh<=120*12)return c+kwh*20;c+=120*12*20;kwh-=120*12;if(kwh<=180*12)return c+kwh*26;c+=180*12*26;kwh-=180*12;return c+kwh*30}
+function GAS_RATE(m3){return 9600+m3*145}
+
+// ================================================================
+// CORE CALCULATION
+// ================================================================
+function getUW(R){return 1/(0.15+parseFloat(R))}
+function getUC(R){return 1/(0.13+parseFloat(R))}
+function getUF(R){return 1/(0.19+parseFloat(R))}
+
+function $(id){return document.getElementById(id)}
+
+function gR(id){
+  var b=document.querySelector('#'+id+' .bo.on');
+  return b?parseFloat(b.dataset.r):0;
+}
+function gWin(){
+  var b=document.querySelector('#winG .bo.on');
+  return b?parseFloat(b.dataset.u):2.33;
+}
+
+function pk(el){
+  var bs=el.parentElement.querySelectorAll('.bo');
+  for(var i=0;i<bs.length;i++) bs[i].classList.remove('on');
+  el.classList.add('on');
+  recalc();
+}
+
+function calcUA(region, wallR, ceilR, floorR, winU){
+  var p=PRESET;
+  var wallU=getUW(wallR), ceilU=getUC(ceilR), floorU=getUF(floorR);
+  var doorU=3.49; // D2 door fixed
+  var dirs=[0.15,0.20,0.45,0.20]; // N E S W ratios
+  var tl=0;
+  for(var i=0;i<dirs.length;i++){
+    var wA=p.winA*dirs[i];
+    var wlA=p.wallA/4-wA;
+    tl+=Math.max(wlA,0)*wallU+wA*winU;
+  }
+  tl+=p.ceilA*ceilU;
+  tl+=p.floorA*floorU*0.7; // temperature difference coefficient
+  tl+=p.doorA*doorU;
+  return p.envArea>0?tl/p.envArea:0;
+}
+
+function getGrade(ua, region){
+  for(var g=7;g>=4;g--){
+    var gs=GRADE_UA[g]?GRADE_UA[g][region]:null;
+    if(gs&&ua<=gs) return g;
+  }
+  return 3;
+}
+
+function calcEnergyCost(region, ua){
+  var uaStd=UA_STD[region]||0.87;
+  if(!uaStd) uaStd=0.87;
+  var ratio=Math.max(ua/uaStd, 0.3);
+  var totalMJ=0;
+  var cats=['heat','cool','vent','hw','light','other'];
+  for(var i=0;i<cats.length;i++){
+    var base=PE_STD_ABS[cats[i]][region];
+    if(cats[i]==='heat') totalMJ+=base*ratio;
+    else totalMJ+=base;
+  }
+  // Split: assume gas hot water, rest is electric
+  var hwMJ=PE_STD_ABS.hw[region];
+  var elecMJ=totalMJ-hwMJ;
+  var elecKwh=elecMJ/ELEC_PEF;
+  var gasM3=hwMJ/GAS_PEF;
+  var annual=ELEC_RATE(elecKwh)+GAS_RATE(gasM3);
+  return Math.round(annual);
+}
+
+function matchSubsidies(ua, grade, region){
+  var zehStd=ZEH_STD[region];
+  var zehUA=zehStd?ua<=zehStd:false;
+  // Simplified BEI estimate based on UA performance
+  var uaStd=UA_STD[region]||0.87;
+  var bei=uaStd?Math.max(0.5,0.7+0.3*(ua/uaStd)):0.8;
+  var subs=[];
+  if(grade>=6&&bei<=0.8) subs.push({name:'子育てエコホーム支援(ZEH水準)',amt:100});
+  else if(grade>=5&&bei<=0.9) subs.push({name:'子育てエコホーム支援(長期優良)',amt:100});
+  if(zehUA&&bei<=0.8) subs.push({name:'ZEH補助金',amt:55});
+  if(grade>=6) subs.push({name:'地域型グリーン化(高度省エネ)',amt:140});
+  else if(grade>=5) subs.push({name:'地域型グリーン化(長寿命型)',amt:110});
+  var loanLimit=0;
+  if(zehUA&&bei<=0.8){loanLimit=4500}
+  else if(grade>=4){loanLimit=4000}
+  if(loanLimit>0){
+    var taxBenefit=Math.round(loanLimit*0.007*13);
+    subs.push({name:'住宅ローン減税',amt:taxBenefit});
+  }
+  if(zehUA) subs.push({name:'フラット35S Aプラン',amt:Math.round(3500*0.005*10)});
+  else if(grade>=4) subs.push({name:'フラット35S Bプラン',amt:Math.round(3500*0.0025*5)});
+  return subs;
+}
+
+// ================================================================
+// MAIN RECALC
+// ================================================================
+function recalc(){
+  var region=parseInt($('regionSel').value,10);
+  var wallR=gR('wallG');
+  var ceilR=gR('ceilG');
+  var floorR=gR('floorG');
+  var winU=gWin();
+
+  if(!wallR||!ceilR||!floorR||!winU) return;
+
+  var ua=calcUA(region, wallR, ceilR, floorR, winU);
+  var grade=getGrade(ua, region);
+  var uaStd=UA_STD[region];
+  var zehStd=ZEH_STD[region];
+  var uaPass=uaStd?ua<=uaStd:true;
+  var zehPass=zehStd?ua<=zehStd:false;
+
+  // UA value
+  $('uaVal').textContent=ua.toFixed(2);
+  $('uaVal').className='rc-value mono '+(uaPass?'pass':'fail');
+  $('uaStd').textContent='基準: '+(uaStd!==null?uaStd+' 以下':'規定なし')+' ['+region+'地域]';
+  $('cardUA').className='result-card '+(uaPass?'pass':'fail');
+
+  // Grade
+  $('gradeVal').textContent='等級'+grade;
+  $('gradeVal').className='rc-value '+(grade>=5?'pass':grade>=4?'neutral':'fail');
+  $('gradeSub').textContent=zehPass?'ZEH基準クリア':(uaPass?'省エネ基準適合':'基準未達');
+  $('cardGrade').className='result-card '+(grade>=5?'pass':grade>=4?'':'fail');
+
+  // Cost
+  var annualCost=calcEnergyCost(region, ua);
+  $('costVal').textContent='¥'+annualCost.toLocaleString();
+  $('costSub').textContent='月額 ¥'+Math.round(annualCost/12).toLocaleString();
+
+  // Baseline cost (GW16K + aluminum double)
+  var baseUA=calcUA(region, 2.22, 4.44, 3.57, 4.65);
+  var baseCost=calcEnergyCost(region, baseUA);
+  var saving=baseCost-annualCost;
+  $('savingVal').textContent=(saving>=0?'-':'+')+' ¥'+Math.round(Math.abs(saving)).toLocaleString();
+  $('savingVal').className='rc-value mono '+(saving>=0?'pass':'fail');
+  $('savingSub').textContent=baseCost>0?Math.round(saving/baseCost*100)+'% 削減':'';
+  $('cardSaving').className='result-card '+(saving>=0?'pass':'fail');
+
+  // Subsidies
+  var subs=matchSubsidies(ua, grade, region);
+  var html='';
+  var total=0;
+  for(var i=0;i<subs.length;i++){
+    html+='<div class="sb-row"><span>'+subs[i].name+'</span><span class="sb-amt">'+subs[i].amt+'万円</span></div>';
+    total+=subs[i].amt;
+  }
+  if(subs.length===0){
+    html='<div style="font-size:12px;color:#94a3b8;padding:4px 0">該当する制度なし（等級4以上で適合）</div>';
+  }
+  $('subsidyList').innerHTML=html;
+  $('subsidyTotal').textContent=subs.length>0?'合計 '+total+'万円 ('+subs.length+'件)':'';
+
+  // Update CTA link with region param
+  $('ctaMain').href='../index.html?region='+region;
+}
+
+// ================================================================
+// URL PARAMS (for iframe embedding)
+// ================================================================
+function applyParams(){
+  var params=new URLSearchParams(window.location.search);
+  if(params.has('region')){
+    var r=parseInt(params.get('region'),10);
+    if(r>=1&&r<=8) $('regionSel').value=r;
+  }
+  // Preset: apply grade-based defaults
+  if(params.has('preset')){
+    var preset=params.get('preset');
+    var m=preset.match(/grade(\d)/);
+    if(m){
+      var targetGrade=parseInt(m[1],10);
+      var region=parseInt($('regionSel').value,10);
+      // Select reasonable defaults for each grade
+      if(targetGrade>=7){
+        selectBtn('wallG','4.55','r');selectBtn('ceilG','6.67','r');selectBtn('floorG','4.55','r');selectBtn('winG','1.30','u');
+      }else if(targetGrade>=6){
+        selectBtn('wallG','3.00','r');selectBtn('ceilG','4.44','r');selectBtn('floorG','3.57','r');selectBtn('winG','1.90','u');
+      }else if(targetGrade>=5){
+        selectBtn('wallG','2.63','r');selectBtn('ceilG','4.44','r');selectBtn('floorG','3.57','r');selectBtn('winG','2.33','u');
+      }else{
+        selectBtn('wallG','2.22','r');selectBtn('ceilG','2.22','r');selectBtn('floorG','1.79','r');selectBtn('winG','4.65','u');
+      }
+    }
+  }
+  if(params.has('wall')){selectBtn('wallG',params.get('wall'),'r')}
+  if(params.has('ceil')){selectBtn('ceilG',params.get('ceil'),'r')}
+  if(params.has('floor')){selectBtn('floorG',params.get('floor'),'r')}
+  if(params.has('win')){selectBtn('winG',params.get('win'),'u')}
+}
+
+function selectBtn(groupId, val, attr){
+  var bs=document.querySelectorAll('#'+groupId+' .bo');
+  for(var i=0;i<bs.length;i++){
+    bs[i].classList.remove('on');
+    var v=bs[i].dataset[attr];
+    if(v&&Math.abs(parseFloat(v)-parseFloat(val))<0.01) bs[i].classList.add('on');
+  }
+}
+
+// ================================================================
+// INIT
+// ================================================================
+applyParams();
+recalc();
+</script>
+</body>
+</html>

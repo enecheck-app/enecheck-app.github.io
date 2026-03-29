@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10000 7000" width="1000" height="700">
+<text x="5000" y="250" text-anchor="middle" font-size="250" font-weight="bold">東側立面図</text>
+<line x1="0" y1="5400" x2="10000" y2="5400" stroke="black" stroke-width="20"/>
+<rect x="0" y="2700" width="10000" height="2700" fill="none" stroke="black" stroke-width="30"/>
+<rect x="0" y="0" width="10000" height="2700" fill="none" stroke="black" stroke-width="30"/>
+<rect x="6500" y="3700" width="1200" height="1000" fill="none" stroke="blue" stroke-width="15" data-type="window"/>
+<rect x="4000" y="900" width="1200" height="1200" fill="none" stroke="blue" stroke-width="15" data-type="window"/>
+</svg>

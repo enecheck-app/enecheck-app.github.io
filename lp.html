@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EneCheck - 省エネ計算を、30秒で。| 2025年義務化対応 無料ツール</title>
+<meta name="description" content="EneCheckは工務店・建材メーカー向けの省エネ計算ツール。UA値計算、光熱費シミュレーション、補助金判定を30秒で。2025年省エネ基準義務化に完全対応。">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --dark: #1e293b;
+  --dark-light: #334155;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-light: #dbeafe;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --white: #ffffff;
+  --bg-light: #f8fafc;
+  --border: #e2e8f0;
+  --success: #10b981;
+  --radius: 12px;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, var(--dark) 0%, #0f172a 100%);
+  color: var(--white);
+  padding: 120px 24px 100px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 50%, rgba(59,130,246,0.08) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(59,130,246,0.05) 0%, transparent 40%);
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(59,130,246,0.15);
+  color: var(--accent);
+  padding: 6px 18px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 28px;
+  border: 1px solid rgba(59,130,246,0.25);
+}
+.hero h1 {
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+.hero h1 span { color: var(--accent); }
+.hero p {
+  font-size: 18px;
+  color: #94a3b8;
+  max-width: 560px;
+  margin: 0 auto 40px;
+  line-height: 1.8;
+}
+.btn-primary {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--white);
+  padding: 16px 40px;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(59,130,246,0.35);
+}
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59,130,246,0.45);
+}
+.btn-secondary {
+  display: inline-block;
+  color: #94a3b8;
+  padding: 16px 24px;
+  font-size: 15px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.btn-secondary:hover { color: var(--white); }
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.hero-stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--white);
+}
+.hero-stat-label {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* Section base */
+section { padding: 100px 24px; }
+.section-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+.section-desc {
+  font-size: 16px;
+  color: var(--text-light);
+  max-width: 600px;
+  margin-bottom: 48px;
+}
+.text-center { text-align: center; }
+.text-center .section-desc { margin-left: auto; margin-right: auto; }
+
+/* Problem */
+.problem { background: var(--bg-light); }
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.problem-card {
+  background: var(--white);
+  padding: 36px 32px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  position: relative;
+}
+.problem-icon {
+  width: 48px;
+  height: 48px;
+  background: #fef2f2;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+.problem-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.problem-card p {
+  font-size: 15px;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+/* Features */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+.feature-card {
+  background: var(--white);
+  padding: 36px 32px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.feature-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 20px rgba(59,130,246,0.08);
+}
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-light);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+.feature-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.feature-card p {
+  font-size: 15px;
+  color: var(--text-light);
+  line-height: 1.7;
+}
+
+/* Social proof */
+.social-proof {
+  background: linear-gradient(135deg, var(--dark) 0%, #0f172a 100%);
+  color: var(--white);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 32px;
+  margin-bottom: 48px;
+}
+.stat-card {
+  text-align: center;
+  padding: 32px 16px;
+  background: rgba(255,255,255,0.04);
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.stat-number {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.stat-unit {
+  font-size: 18px;
+  font-weight: 400;
+}
+.stat-label {
+  font-size: 14px;
+  color: #94a3b8;
+}
+.social-proof blockquote {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 18px;
+  font-style: italic;
+  color: #cbd5e1;
+  line-height: 1.8;
+  padding: 32px 0;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.social-proof blockquote cite {
+  display: block;
+  font-style: normal;
+  font-size: 14px;
+  color: #64748b;
+  margin-top: 16px;
+}
+
+/* Pricing */
+.pricing { background: var(--bg-light); }
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.pricing-card {
+  background: var(--white);
+  padding: 40px 32px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.pricing-card.featured {
+  border-color: var(--accent);
+  box-shadow: 0 8px 30px rgba(59,130,246,0.12);
+}
+.pricing-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 16px;
+  border-radius: 100px;
+}
+.pricing-plan {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.pricing-price {
+  font-size: 40px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.pricing-price span {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-light);
+}
+.pricing-desc {
+  font-size: 14px;
+  color: var(--text-light);
+  margin-bottom: 28px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+.pricing-features {
+  list-style: none;
+  flex: 1;
+  margin-bottom: 32px;
+}
+.pricing-features li {
+  font-size: 14px;
+  padding: 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pricing-features li::before {
+  content: "\2713";
+  color: var(--success);
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.pricing-btn {
+  display: block;
+  text-align: center;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.pricing-btn-outline {
+  border: 2px solid var(--border);
+  color: var(--text);
+}
+.pricing-btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.pricing-btn-primary {
+  background: var(--accent);
+  color: var(--white);
+}
+.pricing-btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+/* Manufacturer */
+.manufacturer {
+  background: linear-gradient(135deg, #1e3a5f 0%, var(--dark) 100%);
+  color: var(--white);
+}
+.manufacturer .section-label { color: #60a5fa; }
+.manufacturer .section-desc { color: #94a3b8; }
+.mfr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.mfr-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+}
+.mfr-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--white);
+}
+.mfr-card p {
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.7;
+}
+.btn-light {
+  display: inline-block;
+  background: var(--white);
+  color: var(--dark);
+  padding: 14px 36px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: 40px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.btn-light:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+/* FAQ */
+.faq-list {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+.faq-question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 24px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: inherit;
+  line-height: 1.5;
+}
+.faq-question::after {
+  content: "+";
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--text-light);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+.faq-item.open .faq-question::after {
+  content: "\2212";
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.faq-answer-inner {
+  padding: 0 0 24px;
+  font-size: 15px;
+  color: var(--text-light);
+  line-height: 1.8;
+}
+
+/* Footer */
+footer {
+  background: var(--dark);
+  color: #94a3b8;
+  padding: 60px 24px 40px;
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+.footer-brand h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.footer-brand p {
+  font-size: 14px;
+  max-width: 300px;
+}
+.footer-links h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+.footer-links a {
+  display: block;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 4px 0;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--white); }
+.footer-bottom {
+  max-width: 1100px;
+  margin: 40px auto 0;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .hero { padding: 80px 20px 60px; }
+  section { padding: 64px 20px; }
+  .hero-stats { flex-direction: column; gap: 20px; }
+  .problem-grid, .features-grid, .pricing-grid, .mfr-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">2025年4月 省エネ基準適合義務化</div>
+    <h1>省エネ計算を、<span>30秒</span>で。</h1>
+    <p>間取り・断熱材・設備を入力するだけ。UA値・光熱費・補助金を即座に算出。すべての工務店に、無料で。</p>
+    <div>
+      <a href="index.html" class="btn-primary">無料で計算を始める</a>
+      <a href="consumer.html" class="btn-secondary" style="color:#fff;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:8px;margin-left:8px">一般の方はこちら（かんたん診断）</a>
+      <a href="#features" class="btn-secondary">機能を見る &darr;</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-value">30秒</div>
+        <div class="hero-stat-label">平均計算時間</div>
+      </div>
+      <div>
+        <div class="hero-stat-value">26+</div>
+        <div class="hero-stat-label">搭載機能数</div>
+      </div>
+      <div>
+        <div class="hero-stat-value">&#165;0</div>
+        <div class="hero-stat-label">基本利用料</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Problem -->
+<section class="problem">
+  <div class="container text-center">
+    <div class="section-label">課題</div>
+    <h2 class="section-title">省エネ計算の「3つの壁」</h2>
+    <p class="section-desc">2025年4月から全新築住宅に省エネ基準適合が義務化。しかし現場には大きな課題が残されています。</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">&#9201;</div>
+        <h3>時間がかかりすぎる</h3>
+        <p>従来の省エネ計算ソフトでは、1棟あたり2〜3時間の入力作業が必要。年間50棟で100時間以上のロスが発生しています。</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">&#128176;</div>
+        <h3>コストが高すぎる</h3>
+        <p>専用ソフトは年間10〜50万円。外注すれば1棟3〜5万円。中小工務店にとって大きな負担です。</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">&#128101;</div>
+        <h3>施主に伝わらない</h3>
+        <p>UA値やQ値を説明されても施主はピンと来ない。「結局いくら得なの?」に即答できないと受注を逃します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="container text-center">
+    <div class="section-label">ソリューション</div>
+    <h2 class="section-title">EneCheckが解決します</h2>
+    <p class="section-desc">直感的な操作で、省エネ計算の全工程をカバー。専門知識がなくても、誰でも使えます。</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">&#127969;</div>
+        <h3>UA値自動計算</h3>
+        <p>間取り・断熱材を選ぶだけで外皮平均熱貫流率を瞬時に算出。省エネ基準・ZEH基準への適合を即判定します。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128161;</div>
+        <h3>光熱費シミュレーション</h3>
+        <p>地域の気候データと電力単価をもとに、年間光熱費を自動計算。断熱グレード変更時の差額も即座に表示します。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128181;</div>
+        <h3>補助金自動判定</h3>
+        <p>子育てグリーン住宅支援事業、ZEH補助金など最新の制度に対応。該当する補助金と金額を自動で表示します。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#127777;</div>
+        <h3>体感温度マップ</h3>
+        <p>冬の朝、各部屋が何度になるかを可視化。「この断熱なら脱衣所も18度以上」と施主に体感で伝えられます。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#9889;</div>
+        <h3>断熱仕様の自動最適化</h3>
+        <p>目標UA値・予算を入力すると、コスパ最良の断熱仕様を自動提案。窓・壁・天井の最適な組み合わせを算出します。</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">&#128196;</div>
+        <h3>申請書類出力</h3>
+        <p>省エネ基準適合の確認書類をPDF出力。建築確認申請にそのまま添付できるフォーマットで生成します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Social Proof -->
+<section class="social-proof">
+  <div class="container text-center">
+    <div class="section-label" style="color:#60a5fa;">市場データ</div>
+    <h2 class="section-title" style="color:#fff;">すべての新築住宅に、省エネ計算が必要になる時代</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">79<span class="stat-unit">万戸</span></div>
+        <div class="stat-label">年間新築着工数</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">100<span class="stat-unit">%</span></div>
+        <div class="stat-label">省エネ基準適合義務化率</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">316<span class="stat-unit">億円</span></div>
+        <div class="stat-label">省エネ計算の潜在市場</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">30<span class="stat-unit">秒</span></div>
+        <div class="stat-label">EneCheckの平均計算時間</div>
+      </div>
+    </div>
+    <blockquote>
+      「省エネ計算の外注費だけで年間150万円かかっていました。EneCheckで自社完結できるようになり、コスト削減だけでなく施主への提案スピードも劇的に改善しました。」
+      <cite>-- 関東エリア 注文住宅工務店 代表</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing" id="pricing">
+  <div class="container text-center">
+    <div class="section-label">料金プラン</div>
+    <h2 class="section-title">まずは無料で始められます</h2>
+    <p class="section-desc">基本機能は完全無料。業務で本格活用するならProプランがおすすめです。</p>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-plan">Free</div>
+        <div class="pricing-price">&#165;0</div>
+        <div class="pricing-desc">個人・小規模工務店向け</div>
+        <ul class="pricing-features">
+          <li>UA値計算</li>
+          <li>光熱費シミュレーション</li>
+          <li>補助金自動判定</li>
+          <li>体感温度マップ</li>
+          <li>断熱仕様の最適化提案</li>
+          <li>月3件まで計算可能</li>
+        </ul>
+        <a href="index.html" class="pricing-btn pricing-btn-outline">無料で始める</a>
+      </div>
+      <div class="pricing-card featured">
+        <div class="pricing-badge">おすすめ</div>
+        <div class="pricing-plan">Pro</div>
+        <div class="pricing-price">&#165;4,980<span>/月</span></div>
+        <div class="pricing-desc">本格運用する工務店向け</div>
+        <ul class="pricing-features">
+          <li>Freeの全機能</li>
+          <li>計算件数 無制限</li>
+          <li>案件管理機能</li>
+          <li>CSV / PDF一括出力</li>
+          <li>申請書類の自動生成</li>
+          <li>自社ロゴ入り提案書</li>
+          <li>メールサポート</li>
+        </ul>
+        <a href="#contact" class="pricing-btn pricing-btn-primary">Proプランを申し込む</a>
+      </div>
+      <div class="pricing-card">
+        <div class="pricing-plan">Enterprise</div>
+        <div class="pricing-price">お問い合わせ</div>
+        <div class="pricing-desc">ハウスメーカー・建材メーカー向け</div>
+        <ul class="pricing-features">
+          <li>Proの全機能</li>
+          <li>API連携</li>
+          <li>自社建材データの優先表示</li>
+          <li>専用カスタマイズ</li>
+          <li>導入支援・研修</li>
+          <li>専任サポート</li>
+        </ul>
+        <a href="#contact" class="pricing-btn pricing-btn-outline">お問い合わせ</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Manufacturer Section -->
+<section class="manufacturer">
+  <div class="container text-center">
+    <div class="section-label">建材メーカー様へ</div>
+    <h2 class="section-title" style="color:#fff;">EneCheckで自社製品の効果を可視化</h2>
+    <p class="section-desc">工務店が断熱材を選ぶ「その瞬間」に、御社の製品性能を数値で訴求できます。カタログでは伝わらない省エネ効果を、リアルタイムシミュレーションで体感してもらえます。</p>
+    <div class="mfr-grid">
+      <div class="mfr-card">
+        <h3>製品効果の即時可視化</h3>
+        <p>御社の断熱材・窓・設備を選択した瞬間に、UA値・光熱費・補助金額がリアルタイムで変化。カタログスペックではなく「実際の家での効果」を伝えられます。</p>
+      </div>
+      <div class="mfr-card">
+        <h3>意思決定の瞬間にリーチ</h3>
+        <p>工務店が仕様を決めるまさにその瞬間に御社製品が表示されます。広告ではなく「計算ツールの選択肢」として自然に認知を獲得できます。</p>
+      </div>
+      <div class="mfr-card">
+        <h3>データドリブンな効果測定</h3>
+        <p>御社製品の選択率、比較されている競合製品、地域別の採用傾向など、これまで見えなかったデータをレポートとしてご提供します。</p>
+      </div>
+    </div>
+    <a href="pitch.html" class="btn-light">スポンサーシップ詳細を見る</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">よくある質問</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question">本当に無料で使えますか?</button>
+        <div class="faq-answer"><div class="faq-answer-inner">はい。基本機能（UA値計算、光熱費シミュレーション、補助金判定、体感温度マップ）は完全無料でお使いいただけます。月3件までの制限がありますが、個人利用やお試しには十分な件数です。本格的に業務で利用される場合はProプラン（月額4,980円）をご検討ください。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">計算の精度は信頼できますか?</button>
+        <div class="faq-answer"><div class="faq-answer-inner">EneCheckの計算ロジックは、国土交通省が定める「住宅の品質確保の促進等に関する法律」に基づくエネルギー消費性能計算プログラムに準拠しています。外皮計算は建築研究所の計算方法に沿って実装しており、確認申請にも対応可能な精度を確保しています。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">インストールは必要ですか?</button>
+        <div class="faq-answer"><div class="faq-answer-inner">不要です。EneCheckはWebブラウザ上で動作する単一HTMLファイルのアプリケーションです。インターネット接続があればどこからでもアクセス可能。また、オフライン利用のためにHTMLファイルをダウンロードしてローカルで使うこともできます。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">入力データは保存されますか?</button>
+        <div class="faq-answer"><div class="faq-answer-inner">Freeプランではブラウザのローカルストレージにデータが保存されます。サーバーへの送信は一切ありません。Proプランでは案件管理機能としてクラウド保存オプションもご利用いただけます。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">どの地域に対応していますか?</button>
+        <div class="faq-answer"><div class="faq-answer-inner">日本全国8地域区分すべてに対応しています。市区町村を入力すると自動的に地域区分が判定され、その地域の気候データに基づいた正確な計算が行われます。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">建材メーカーのスポンサーシップとは?</button>
+        <div class="faq-answer"><div class="faq-answer-inner">建材メーカー様には、EneCheck上で自社製品を優先表示するスポンサープログラムをご用意しています。工務店が断熱材や窓を選択する際に、御社製品の性能値がリアルタイムで反映されるため、効果的な製品PRが可能です。詳しくは<a href="pitch.html">スポンサーシップ資料</a>をご覧ください。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer id="contact">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>EneCheck</h3>
+      <p>すべての工務店に、省エネ計算の力を。2025年義務化対応の無料省エネ計算ツール。</p>
+    </div>
+    <div class="footer-links">
+      <h4>プロダクト</h4>
+      <a href="index.html">計算ツール</a>
+      <a href="#features">機能一覧</a>
+      <a href="#pricing">料金プラン</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="footer-links">
+      <h4>メーカー様向け</h4>
+      <a href="pitch.html">スポンサーシップ</a>
+      <a href="pitch.html">資料ダウンロード</a>
+    </div>
+    <div class="footer-links">
+      <h4>お問い合わせ</h4>
+      <a href="mailto:info@enecheck.jp">info@enecheck.jp</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2025 EneCheck. All rights reserved.
+  </div>
+</footer>
+
+<script>
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const answer = btn.nextElementSibling;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-answer').style.maxHeight = '0';
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  });
+});
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>
