@@ -1764,13 +1764,13 @@ body { display: flex; min-height: 100vh; }
         <div><div style="font-size:9pt;color:#666">設計者 署名・捺印</div><div style="border-bottom:1px solid #999;height:40px;margin-top:4px"></div></div>
         <div><div style="font-size:9pt;color:#666">確認日</div><div style="border-bottom:1px solid #999;height:40px;margin-top:4px"></div></div>
       </div>
-      <div style="margin-top:20px;padding:8px;border:1px solid #999;font-size:8pt;color:#666;line-height:1.6"><strong>注意事項:</strong> 本通知書はEneCheck v3.2による概算結果に基づきます。確認申請に使用する場合は、国土交通省認定の省エネルギー計算プログラムによる算定結果と照合してください。計算基準: 建築物省エネ法2025年基準 / 住宅品確法 / HEAT20設計ガイドブック2021</div>
+      <div style="margin-top:20px;padding:8px;border:1px solid #999;font-size:8pt;color:#666;line-height:1.6"><strong>注意事項:</strong> 本通知書はEneCheck v3.4による概算結果に基づきます。確認申請に使用する場合は、国土交通省認定の省エネルギー計算プログラムによる算定結果と照合してください。計算基準: 建築物省エネ法2025年基準 / 住宅品確法 / HEAT20設計ガイドブック2021</div>
     </div>
   </div>
 
-  <div class="footer no-print"><span>EneCheck v3.2</span><span>概算値です。確認申請には正式プログラムをご利用ください。</span></div>
+  <div class="footer no-print"><span>EneCheck v3.4</span><span>概算値です。確認申請には正式プログラムをご利用ください。</span></div>
   <div class="print-disclaimer">
-    <strong>免責事項:</strong> 本計算書はEneCheck v3.2 による概算結果です。確認申請には国土交通省認定の正式プログラムをご利用ください。<br>
+    <strong>免責事項:</strong> 本計算書はEneCheck v3.4 による概算結果です。確認申請には国土交通省認定の正式プログラムをご利用ください。<br>
     <strong>計算方法の準拠:</strong><br>
     ・外皮性能(UA/ηAC/ηAH): 建築物省エネ法 平成28年基準に準拠。表面熱抵抗は部位別(壁Ri=0.11/Ro=0.04, 天井Ri=0.09/Ro=0.04, 床Ri=0.15/Ro=0.04)を適用<br>
     ・方位係数: 平成28年基準 付録B 表1の8方位係数を4方位に平均化して使用<br>
@@ -2223,7 +2223,7 @@ function exportCSV(){
   for(var i=0;i<eqGroups.length;i++){var eb=document.querySelector('#'+eqGroups[i].id+' .bo.on');rows.push([eqGroups[i].name,eb?eb.textContent.trim():'-',eb?'f='+eb.dataset.f:'-','-','-'])}
   rows.push(['太陽光発電',d.pvKw+'kW','-','-','-']);
   rows.push([]);
-  rows.push(['出力日',new Date().toISOString().slice(0,10),'','EneCheck v3.2','']);
+  rows.push(['出力日',new Date().toISOString().slice(0,10),'','EneCheck v3.4','']);
   rows.push(['会社名',$('inCompany').value||'-','','','']);
   rows.push(['物件名',$('inProject').value||'-','','','']);
   rows.push(['設計者',$('inDesigner').value||'-','','','']);
@@ -2697,7 +2697,7 @@ function buildPresSlides(){
   var months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
   var mCosts=[];
   var hdd=HDD[d?d.region:6]||1700;
-  var mHddRatio=[0.18,0.16,0.13,0.08,0.03,0.00,0.00,0.00,0.02,0.06,0.11,0.15];
+  var mHddRatio=[0.21,0.18,0.14,0.08,0.03,0.00,0.00,0.00,0.00,0.05,0.12,0.19];
   var mCddRatio=[0.00,0.00,0.00,0.02,0.05,0.15,0.28,0.30,0.15,0.04,0.01,0.00];
   for(var m=0;m<12;m++){
     var hCost=totalCost*0.4*mHddRatio[m]+totalCost*0.3*mCddRatio[m]+totalCost*0.3/12;
@@ -2997,7 +2997,7 @@ function calcLoan(){
 // ================================================================
 // FEATURE: MONTHLY COST CALENDAR (光熱費カレンダー)
 // ================================================================
-var MONTH_HEAT_RATIO=[0.18,0.16,0.12,0.06,0.02,0,0,0,0,0.04,0.10,0.16];
+var MONTH_HEAT_RATIO=[0.21,0.18,0.14,0.08,0.03,0,0,0,0,0.05,0.12,0.19];
 var MONTH_COOL_RATIO=[0,0,0,0,0.05,0.15,0.25,0.30,0.20,0.05,0,0];
 var MONTH_NAMES=['1\u6708','2\u6708','3\u6708','4\u6708','5\u6708','6\u6708','7\u6708','8\u6708','9\u6708','10\u6708','11\u6708','12\u6708'];
 function renderMonthlyCalendar(){
@@ -3106,7 +3106,7 @@ var SPEC_STD_WIN_U_BY_CAT = {
   'は': {1:2.33, 2:2.33, 3:2.33, 4:3.49, 5:4.65, 6:4.65, 7:4.65, 8:null},
   'に': {1:2.33, 2:2.33, 3:2.33, 4:3.49, 5:4.65, 6:4.65, 7:4.65, 8:null}
 };
-var ETA_H_STD = {1:null,2:null,3:null,4:null,5:null,6:null,7:null,8:null};
+// var ETA_H_STD = {1:null,2:null,3:null,4:null,5:null,6:null,7:null,8:null}; // dead code removed
 
 function renderOfficialSheet(){
   var d=window._peData; if(!d) return;
@@ -3638,7 +3638,7 @@ function renderOfficialSheet(){
 
   // ========== Disclaimer ==========
   h+='<div class="os-disclaimer">';
-  h+='<strong>注意事項:</strong> 本計算書はEneCheck v3.2による概算結果に基づきます。確認申請に使用する場合は、国土交通省認定の省エネルギー計算プログラムによる算定結果と照合してください。<br>';
+  h+='<strong>注意事項:</strong> 本計算書はEneCheck v3.4による概算結果に基づきます。確認申請に使用する場合は、国土交通省認定の省エネルギー計算プログラムによる算定結果と照合してください。<br>';
   h+='<strong>計算基準:</strong> 建築物省エネ法2025年基準 / 住宅品確法 / 平成28年基準 付録B 方位係数<br>';
   h+='<strong>仕様基準:</strong> 令和4年国土交通省告示第1105号<br>';
   h+='表面熱抵抗: 壁 Ri=0.11/Ro=0.04, 天井 Ri=0.09/Ro=0.04, 床 Ri=0.15/Ro=0.04<br>';

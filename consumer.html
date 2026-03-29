@@ -312,7 +312,7 @@ select:focus{outline:none;border-color:#f97316}
     <div style="font-size:13px;color:#999;margin-bottom:8px">もっと詳しく</div>
     <a href="index.html" style="display:inline-block;padding:10px 20px;border:1px solid #ddd;border-radius:8px;color:#333;text-decoration:none;font-size:13px;margin:4px"><svg class="icon-svg" style="color:#f97316"><use href="#ic-wrench"/></svg> プロ向け詳細計算</a>
     <a href="pages/index-v2.html" style="display:inline-block;padding:10px 20px;border:1px solid #ddd;border-radius:8px;color:#333;text-decoration:none;font-size:13px;margin:4px"><svg class="icon-svg" style="color:#6366f1"><use href="#ic-book"/></svg> 地域別ガイド</a>
-    <a href="lp.html" style="display:inline-block;padding:10px 20px;border:1px solid #ddd;border-radius:8px;color:#333;text-decoration:none;font-size:13px;margin:4px"><svg class="icon-svg" style="color:#3b82f6"><use href="#ic-info"/></svg> EneCheckとは</a>
+    <a href="lp-consumer.html" style="display:inline-block;padding:10px 20px;border:1px solid #ddd;border-radius:8px;color:#333;text-decoration:none;font-size:13px;margin:4px"><svg class="icon-svg" style="color:#3b82f6"><use href="#ic-info"/></svg> EneCheckとは</a>
   </div>
 </div>
 
@@ -368,7 +368,7 @@ var PE_STD = {
 
 var UA_STD = {1:0.46,2:0.46,3:0.56,4:0.75,5:0.87,6:0.87,7:0.87,8:2.0};
 
-var CO2_FACTOR = 0.058;
+var CO2_FACTOR = 0.045;
 
 var PRESET = {area:120, envArea:310, wallA:120, ceilA:60, floorA:60, winA:21, doorA:3.5};
 
@@ -391,7 +391,7 @@ var state = {
 
 function getUW(R) { return 1 / (0.15 + parseFloat(R)); }
 function getUC(R) { return 1 / (0.13 + parseFloat(R)); }
-function getUF(R) { return R > 0 ? 1 / (0.19 + parseFloat(R)) : 3.0; }
+function getUF(R) { return 1 / (0.19 + parseFloat(R)); }
 
 function calcUA(specs, region) {
   var p = PRESET;
@@ -401,7 +401,7 @@ function calcUA(specs, region) {
   var winU = specs.winU;
   var doorU = specs.doorU || winU;
 
-  var winDirRatio = [0.25, 0.25, 0.30, 0.20]; // N,E,S,W approximate
+  var winDirRatio = [0.15, 0.20, 0.45, 0.20]; // N,E,S,W approximate
   var tl = 0;
   for (var i = 0; i < 4; i++) {
     var wA = p.winA * winDirRatio[i];
